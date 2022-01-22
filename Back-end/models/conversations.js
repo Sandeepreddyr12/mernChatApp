@@ -5,7 +5,8 @@ const conversationSchema = new mongoose.Schema({
             type : String, required : true
         },
         
-        userid : String
+        userId1 : String,
+        userId2 : String
         },
     { timestamps : true}
      ) 

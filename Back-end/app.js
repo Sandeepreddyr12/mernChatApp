@@ -82,3 +82,6 @@ const getUser = (userId) => {
     io.emit("getUsers", users);
   });
     });
+
+
+    console.log(users,"🎇🎆");

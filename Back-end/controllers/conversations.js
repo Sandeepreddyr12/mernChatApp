@@ -7,8 +7,9 @@ const Conversation = require('../models/conversations');
 const createConversation = async (req,res,next) =>{
     const createdConversation = new Conversation({
         name : req.body.name,
-        userid : req.body.id
-    })
+        userId1 : req.body.id1,
+        userId2 : req.body.id2
+    })  
 
     const result = await createdConversation.save();
     res.json(result)

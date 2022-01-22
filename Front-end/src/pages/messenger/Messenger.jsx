@@ -16,7 +16,7 @@ export default function Messenger() {
   // const scrollRef = useRef();
 
   const [conversations, setconversations] = useState(null)
-  const [currentChatId, setcurrentChatId] = useState(null)
+  const [currentChat, setcurrentChat] = useState(null)
   const [chatData, setchatData] = useState(null)
   const [newMessage, setnewMessage] = useState(null)
   const [UserId, setUserId] = useState(null);
@@ -40,39 +40,36 @@ export default function Messenger() {
     })
     .catch(err => console.log(err))
     
-    console.log(conversations) 
   }, [])
   
+  // console.log(conversations) 
+  console.log(currentChat);
 
-  
-  
 useEffect(() => {
     
-    axios.get(`http://localhost:5000/chat/${currentChatId}`)
+    axios.get(`http://localhost:5000/chat/${currentChat?._id}`)
     .then(a => {
       setchatData(a.data)
     })
     .catch(err => console.log(err))
-    console.log(chatData) 
     
-  }, [currentChatId])
-
-
-  
+  }, [currentChat])
   
 
   const newMessageHandler = () => {
-    console.log(currentChatId)
+    console.log(currentChat)
 
     const postmessage = {
-        id : currentChatId,
+        id : currentChat._id,
         sender : UserId,
         message : newMessage
     }
 
+    const receiverId = currentChat.userId2
+
     socket.current.emit("sendMessage", {
-      senderId: currentChatId,
-      // receiverId,
+      senderId: currentChat.userId1,
+      receiverId : currentChat.userId2,
       text: newMessage,
     });
 
@@ -89,7 +86,7 @@ useEffect(() => {
 
 
   useEffect(() => {
-    socket.current = socketClient("ws://localhost:8900");
+    socket.current = socketClient("ws://localhost:5000");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.senderId,
@@ -105,16 +102,16 @@ useEffect(() => {
   //     setMessages((prev) => [...prev, arrivalMessage]);
   // }, [arrivalMessage, currentChat]);
 
-  // useEffect(() => {
-  //   socket.current.emit("addUser", user._id);
-  //   socket.current.on("getUsers", (users) => {
-  //     setOnlineUsers(
-  //       user.followings.filter((f) => users.some((u) => u.userId === f))
-  //     );
-  //   });
-  // }, [user]);
+  useEffect(() => {
+    socket.current.emit("addUser", currentChat?.userId1);
+    socket.current.on("getUsers", (users) => {
+      // setOnlineUsers(
+      //   user.followings.filter((f) => users.some((u) => u.userId === f))
+      // );
+    });
+  }, [currentChat]);
 
-
+  
 
   return (
     <>
@@ -129,13 +126,13 @@ useEffect(() => {
             <input placeholder="Search for friends" className="chatMenuInput" />
            
             {
-             conversations ? conversations.map(a =><div onClick={() => setcurrentChatId(a._id)} key={a._id}><Conversation  name = {a.name}/></div>) : <div className="noConversationText">no conversations</div>
+             conversations ? conversations.map(a =><div onClick={() => setcurrentChat(a)} key={a._id}><Conversation  name = {a.name}/></div>) : <div className="noConversationText">no conversations</div>
             }
           </div>
         </div>
         <div className="chatBox">
-          <div className="chatBoxWrapper">
-            {currentChatId ?  (
+          <div className="chatBoxWrapper"> 
+            {currentChat ?  (
               <>
               {chatData.map(a =>  <div className="chatBoxTop" key={a._id}> 
               <Message data = {a} sender = {a._id === UserId}/>
