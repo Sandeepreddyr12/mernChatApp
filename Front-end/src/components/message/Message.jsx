@@ -4,7 +4,7 @@ import "./message.css";
 export default function Message(props) {
   let sender = props.data.sender === '12345a'
   return (
-    <div className={sender ? "message own" : "message"}>
+    <div className={ sender ? "message own" : "message"}>
       <div className="messageTop">
         <img
           className="messageImg"

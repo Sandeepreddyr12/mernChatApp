@@ -1,10 +1,15 @@
 import React, {useState, useRef, useEffect} from "react";
 import axios from "axios";
+import socketClient from 'socket.io-client'
 
 import "./messenger.css";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
 // import ChatOnline from "../../components/chatOnline/ChatOnline";
+
+
+
+const backEnd = "http://localhost:5000";
 
 export default function Messenger() {
   
@@ -15,6 +20,13 @@ export default function Messenger() {
   const [chatData, setchatData] = useState(null)
   const [newMessage, setnewMessage] = useState(null)
   const [UserId, setUserId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const [arrivalMessage, setArrivalMessage] = useState(null);
+  const [onlineUsers, setOnlineUsers] = useState([]);
+    const socket = useRef();
+
+  
+
 
 
   useEffect(() => {
@@ -47,8 +59,7 @@ useEffect(() => {
 
 
   
- 
-
+  
 
   const newMessageHandler = () => {
     console.log(currentChatId)
@@ -58,6 +69,12 @@ useEffect(() => {
         sender : UserId,
         message : newMessage
     }
+
+    socket.current.emit("sendMessage", {
+      senderId: currentChatId,
+      // receiverId,
+      text: newMessage,
+    });
 
    axios.post("http://localhost:5000/chat/",postmessage)
    .then(a => {
@@ -69,6 +86,33 @@ useEffect(() => {
   // useEffect(() => {
   //   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   // }, [messages]);
+
+
+  useEffect(() => {
+    socket.current = socketClient("ws://localhost:8900");
+    socket.current.on("getMessage", (data) => {
+      setArrivalMessage({
+        sender: data.senderId,
+        text: data.text,
+        createdAt: Date.now(),
+      });
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   arrivalMessage &&
+  //     currentChat?.members.includes(arrivalMessage.sender) &&
+  //     setMessages((prev) => [...prev, arrivalMessage]);
+  // }, [arrivalMessage, currentChat]);
+
+  // useEffect(() => {
+  //   socket.current.emit("addUser", user._id);
+  //   socket.current.on("getUsers", (users) => {
+  //     setOnlineUsers(
+  //       user.followings.filter((f) => users.some((u) => u.userId === f))
+  //     );
+  //   });
+  // }, [user]);
 
 
 
