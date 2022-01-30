@@ -48,8 +48,13 @@
   border-radius: 10px;
   border: none;
   background-color: #ca4a50;
-  color: white;
+  
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
+}
+
+.registerButton a{
+  color: white;
+  text-decoration: none;
 }

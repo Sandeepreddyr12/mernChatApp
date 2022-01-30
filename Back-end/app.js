@@ -5,11 +5,16 @@ const mongoose = require('mongoose');
 
 const conversations = require('./routes/conversations')
 const chats = require('./routes/chats')
+const profile = require('./routes/users')
+const HttpError = require('./models/http-error')
+
 
 const app = express();
 
 app.use(bodyparser.json());
 
+
+//cors handler
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader(
@@ -21,8 +26,28 @@ app.use((req, res, next) => {
     next();
   });  
 
+
+
+  // routes
+
+app.use('/profile', profile);
 app.use('/chat', chats);
 app.use('/', conversations);
+app.use((req,res,next) =>{
+const error = new HttpError("page not found", 404);
+throw error
+})
+
+
+//error handler
+
+app.use((err, req, res, next) =>{
+  if(res.headerSent){
+    return next(err);
+  }
+  res.status(err.code || 500);
+  res.json({message : err.message || "an unknown error occured"})
+})
 
 
 const server = app.listen(5000, () =>{ console.log('node js connected')})

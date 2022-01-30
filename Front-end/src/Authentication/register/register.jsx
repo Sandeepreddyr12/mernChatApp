@@ -1,18 +1,72 @@
+import {useRef,useState,useContext} from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+
 import "../login/login.css";
+import { UserContext } from '../../context/userContext';
+
 
 export default function Register() {
+
+  const {auth, setauth} = useContext(UserContext);
+
+  const [loading, setLoadin] = useState(false);
+   
+  const username = useRef();
+  const email = useRef();
+  const password = useRef();
+
+
+
+
+  const registerHandler =  (e) => {
+    e.preventDefault();
+      const user = {
+        name: username.current.value,
+        email: email.current.value,
+        password: password.current.value,
+      }
+      console.log(user);
+        axios.post("http://localhost:5000/profile/signup", user)
+        .then((a) => {
+          console.log(a.data);
+          setauth({...auth,
+            user : a.data,
+            isLoggedIn : true
+          })
+          setLoadin(false)
+          // history.push("/login")
+        })
+        .catch ((err) => {
+          setauth({...auth,
+            user : null,
+            isLoggedIn : false,
+            error : err
+          })
+          setLoadin(false)
+        console.log(err);
+        });
+  };
+
   return (
     <div className="login">
-          <div className="loginBox">
-            <input placeholder="Username" className="loginInput" />
-            <input placeholder="Email" className="loginInput" />
-            <input placeholder="Password" className="loginInput" />
-            {/* <input placeholder="Password Again" className="loginInput" /> */}
-            <button className="signinButton">Sign Up</button>
+          <form className="loginBox" onSubmit={registerHandler}>
+            <input placeholder="Username" ref={username} className="loginInput" />
+            <input  placeholder="Email"
+              type="email"
+              required
+              ref={email}
+               className="loginInput" />
+            <input placeholder="Password"
+              type="password"
+              required
+              ref={password}
+              minLength="6" className="loginInput" />
+            <button className="signinButton" type="submit">Sign Up</button>
             <button className="registerButton">
-              Log into Account
+            <Link to="/"> Log into Account</Link>
             </button>
-          </div>
+          </form>
     </div>
   );
 }
