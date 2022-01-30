@@ -8,7 +8,7 @@ import Spinner from '../../components/spinner/Spinner';
 import "./login.css";
 
 export default function Login() {
-  const {auth, setauth} = useContext(UserContext);
+  const {user,login,logout} = useContext(UserContext);
 
   const [loading, setLoadin] = useState(false);
 
@@ -21,7 +21,7 @@ export default function Login() {
   const password = useRef();
 
 useEffect(() => {
-  if(auth.user){
+  if(user){
     navigate("/", {replace : true});
   }
   
@@ -41,24 +41,17 @@ useEffect(() => {
         axios.post("http://localhost:5000/profile/login", user)
         .then((a) => {
           console.log(a.data);
-          setauth({...auth,
-            user : a.data,
-            isLoggedIn : true
-          })
-          setLoadin(false)
+          login(a.data);
+          setLoadin(false);
         })
         .catch ((err) => {
-          setauth({...auth,
-            user : null,
-            isLoggedIn : false,
-            error : err
-          })
+          logout(null)
           setLoadin(false)
         console.log(err);
         });
   };
 
-  console.log(auth)
+  console.log(user)
 
 
   return (

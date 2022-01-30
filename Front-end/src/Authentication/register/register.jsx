@@ -8,7 +8,7 @@ import { UserContext } from '../../context/userContext';
 
 export default function Register() {
 
-  const {auth, setauth} = useContext(UserContext);
+  const {user,login,logout} = useContext(UserContext);
 
   const [loading, setLoadin] = useState(false);
    
@@ -30,19 +30,12 @@ export default function Register() {
         axios.post("http://localhost:5000/profile/signup", user)
         .then((a) => {
           console.log(a.data);
-          setauth({...auth,
-            user : a.data,
-            isLoggedIn : true
-          })
+          login(a.data)
           setLoadin(false)
           // history.push("/login")
         })
         .catch ((err) => {
-          setauth({...auth,
-            user : null,
-            isLoggedIn : false,
-            error : err
-          })
+          logout(null)
           setLoadin(false)
         console.log(err);
         });
