@@ -2,9 +2,8 @@ import "./message.css";
 // import { format } from "timeago.js";
 
 export default function Message(props) {
-  let sender = props.data.sender === '12345a'
   return (
-    <div className={ sender ? "message own" : "message"}>
+    <div className={ props.sender ? "message own" : "message"}>
       <div className="messageTop">
         <img
           className="messageImg"

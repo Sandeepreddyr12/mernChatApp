@@ -1,15 +1,17 @@
-import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useEffect,useContext} from "react";
 import axios from "axios";
-import socketClient from 'socket.io-client'
-
+import io from "socket.io-client";
 import "./messenger.css";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
+import UsersList from "../users/UsersList";
+import { UserContext } from "../../context/userContext";
 // import ChatOnline from "../../components/chatOnline/ChatOnline";
 
 
-
-const backEnd = "http://localhost:5000";
+let socket;
+  const ENDPOINT = "http://localhost:5000";
+// const backEnd = "http://localhost:5000";
 
 export default function Messenger() {
   
@@ -19,14 +21,22 @@ export default function Messenger() {
   const [currentChat, setcurrentChat] = useState(null)
   const [chatData, setchatData] = useState(null)
   const [newMessage, setnewMessage] = useState(null)
-  const [UserId, setUserId] = useState(null);
+  // const [UserId, setUserId] = useState(null);
   const [messages, setMessages] = useState([]);
-  const [arrivalMessage, setArrivalMessage] = useState(null);
-  const [onlineUsers, setOnlineUsers] = useState([]);
-    const socket = useRef();
+  
+  
+
+  
+  const {user : owner} = useContext(UserContext);
 
   
 
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", owner?.user);
+  
+    // eslint-disable-next-line
+  }, []);
 
 
   useEffect(() => {
@@ -36,17 +46,19 @@ export default function Messenger() {
       setconversations(a.data)
 
       
+      console.log(currentChat);
       console.log(a.data) 
     })
     .catch(err => console.log(err))
     
   }, [])
   
-  // console.log(conversations) 
-  console.log(currentChat);
-
-useEffect(() => {
+  // console.log(owner.user) 
+  
+  useEffect(() => {
+    console.log(currentChat?._id)
     
+    socket.emit("join chat", currentChat?._id);
     axios.get(`http://localhost:5000/chat/${currentChat?._id}`)
     .then(a => {
       setchatData(a.data)
@@ -57,68 +69,188 @@ useEffect(() => {
   
 
   const newMessageHandler = () => {
-    console.log(currentChat)
+
+    
 
     const postmessage = {
         id : currentChat._id,
-        sender : UserId,
+        sender : owner?.user?.id,
         message : newMessage
     }
 
-    const receiverId = currentChat.userId2
+    const data = {
+      ...postmessage,
+      receiverId : owner?.user?.id == currentChat.userId2 ? currentChat.userId1 : currentChat.userId2,
+    }
 
-    socket.current.emit("sendMessage", {
-      senderId: currentChat.userId1,
-      receiverId : currentChat.userId2,
-      text: newMessage,
-    });
-
-   axios.post("http://localhost:5000/chat/",postmessage)
+    axios.post("http://localhost:5000/chat/",postmessage)
    .then(a => {
     console.log(a.data)
+    socket.emit("new message", data);
   })
   .catch(err => console.log(err))
   }
+
+  useEffect(() => {
+      socket.on("message recieved", (newMessageRecieved) => {
+        if (
+          !currentChat || // if chat is not selected or doesn't match current chat
+          currentChat._id !== newMessageRecieved.id
+        ) {return } 
+        else {
+          setMessages([...messages, newMessageRecieved.message]);
+        }
+      });
+    });
 
   // useEffect(() => {
   //   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   // }, [messages]);
 
 
-  useEffect(() => {
-    socket.current = socketClient("ws://localhost:5000");
-    socket.current.on("getMessage", (data) => {
-      setArrivalMessage({
-        sender: data.senderId,
-        text: data.text,
-        createdAt: Date.now(),
-      });
-    });
-  }, []);
 
-  // useEffect(() => {
-  //   arrivalMessage &&
-  //     currentChat?.members.includes(arrivalMessage.sender) &&
-  //     setMessages((prev) => [...prev, arrivalMessage]);
-  // }, [arrivalMessage, currentChat]);
 
-  useEffect(() => {
-    socket.current.emit("addUser", currentChat?.userId1);
-    socket.current.on("getUsers", (users) => {
-      // setOnlineUsers(
-      //   user.followings.filter((f) => users.some((u) => u.userId === f))
-      // );
-    });
-  }, [currentChat]);
+  
+
+ 
+//////////////////////////////////////
+
+
+// const fetchMessages = async () => {
+//   if (!selectedChat) return;
+
+//   try {
+//     const config = {
+//       headers: {
+//         Authorization: `Bearer ${user.token}`,
+//       },
+//     };
+
+//     setLoading(true);
+
+//     const { data } = await axios.get(
+//       `/api/message/${selectedChat._id}`,
+//       config
+//     );
+//     setMessages(data);
+//     setLoading(false);
+
+//     socket.emit("join chat", selectedChat._id);
+//   } catch (error) {
+//     toast({
+//       title: "Error Occured!",
+//       description: "Failed to Load the Messages",
+//       status: "error",
+//       duration: 5000,
+//       isClosable: true,
+//       position: "bottom",
+//     });
+//   }
+// };
+
+// const sendMessage = async (event) => {
+//   if (event.key === "Enter" && newMessage) {
+//     socket.emit("stop typing", selectedChat._id);
+//     try {
+//       const config = {
+//         headers: {
+//           "Content-type": "application/json",
+//           Authorization: `Bearer ${user.token}`,
+//         },
+//       };
+//       setNewMessage("");
+//       const { data } = await axios.post(
+//         "/api/message",
+//         {
+//           content: newMessage,
+//           chatId: selectedChat,
+//         },
+//         config
+//       );
+//       socket.emit("new message", data);
+//       setMessages([...messages, data]);
+//     } catch (error) {
+//       toast({
+//         title: "Error Occured!",
+//         description: "Failed to send the Message",
+//         status: "error",
+//         duration: 5000,
+//         isClosable: true,
+//         position: "bottom",
+//       });
+//     }
+//   }
+// };
+
+// useEffect(() => {
+//   socket = io(ENDPOINT);
+//   socket.emit("setup", user);
+//   socket.on("connected", () => setSocketConnected(true));
+//   socket.on("typing", () => setIsTyping(true));
+//   socket.on("stop typing", () => setIsTyping(false));
+
+//   // eslint-disable-next-line
+// }, []);
+
+// useEffect(() => {
+//   fetchMessages();
+
+//   selectedChatCompare = selectedChat;
+//   // eslint-disable-next-line
+// }, [selectedChat]);
+
+// useEffect(() => {
+//   socket.on("message recieved", (newMessageRecieved) => {
+//     if (
+//       !selectedChatCompare || // if chat is not selected or doesn't match current chat
+//       selectedChatCompare._id !== newMessageRecieved.chat._id
+//     ) {
+//       if (!notification.includes(newMessageRecieved)) {
+//         setNotification([newMessageRecieved, ...notification]);
+//         setFetchAgain(!fetchAgain);
+//       }
+//     } else {
+//       setMessages([...messages, newMessageRecieved]);
+//     }
+//   });
+// });
+
+// const typingHandler = (e) => {
+//   setNewMessage(e.target.value);
+
+//   if (!socketConnected) return;
+
+//   if (!typing) {
+//     setTyping(true);
+//     socket.emit("typing", selectedChat._id);
+//   }
+//   let lastTypingTime = new Date().getTime();
+//   var timerLength = 3000;
+//   setTimeout(() => {
+//     var timeNow = new Date().getTime();
+//     var timeDiff = timeNow - lastTypingTime;
+//     if (timeDiff >= timerLength && typing) {
+//       socket.emit("stop typing", selectedChat._id);
+//       setTyping(false);
+//     }
+//   }, timerLength);
+// };
+
+
+
+
+
+
 
   
 
   return (
     <>
     <div style={{marginTop : "20px", }}>
-      <input type="text" placeholder="enter id here" 
+      {/* <input type="text" placeholder="enter id here" 
         onChange={(e) => setUserId(e.target.value)}
-      />
+      /> */}
+      <div>hi there I'm {owner?.user?.name}</div>
     </div>
       <div className="messenger">
         <div className="chatMenu">
@@ -135,7 +267,7 @@ useEffect(() => {
             {currentChat ?  (
               <>
               {chatData.map(a =>  <div className="chatBoxTop" key={a._id}> 
-              <Message data = {a} sender = {a._id === UserId}/>
+              <Message data = {a} sender = {a.sender === owner?.user?.id}/>
               </div>)}
                 <div className="chatBoxBottom">
                   <textarea
@@ -156,7 +288,7 @@ useEffect(() => {
           </div>
         </div>
         <div className="users">
-                users
+                <UsersList/>
         </div>
       </div>
     </>

@@ -40,7 +40,7 @@ useEffect(() => {
 
         axios.post("http://localhost:5000/profile/login", user)
         .then((a) => {
-          console.log(a.data);
+          // console.log(a.data);
           login(a.data);
           setLoadin(false);
         })

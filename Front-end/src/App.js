@@ -17,19 +17,22 @@ function App() {
   const login = useCallback((data) =>{
     setuser(data);
   setisLoggedIn(true);
-  } ,[isLoggedIn])
+  } ,[])
 
   const logout = useCallback((data) =>{
     setuser(null);
     setisLoggedIn(false);
-  } ,[isLoggedIn])
+  } ,[])
+
+
+  // if(isLoggedIn)
 
 
   return (
     <UserContext.Provider value = {{user,login,logout}}>
     <Routes>
     <Route path = "/" element = {isLoggedIn ? <Home/> : <Login/> }/>
-      {/* <Route path = "/login" element = {<Login/>}/> */}
+      {/* <Route path = "/" element = {<Home/>}/> */}
       <Route path = "/register" element = {isLoggedIn ? <Home/> : <Register/> }/>
     </Routes>
     </UserContext.Provider>
