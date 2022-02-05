@@ -64,33 +64,43 @@ mongoose
       },
     });
 
-    io.on("connection", (socket) => {
-      console.log("Connected to socket.io");
-      socket.on("setup", (userData) => {
-        socket.join(userData.id);
-        // console.log(userData,"✨🎉")
-        socket.emit("connected");
-      });
-    
-      socket.on("join chat", (room) => {
-        socket.join(room);
-        console.log("User Joined Room: " + room);
-      });
-      
-    
-      socket.on("new message", (newMessageRecieved) => {
-        var chat = newMessageRecieved;
-    
-        if (!chat.receiverId) return console.log("chat.users not defined");
-    
-          // if (chat.senderId == newMessageRecieved.sender._id) return;
-    
-          socket.in(chat.receiverId).emit("message recieved", newMessageRecieved);
-      });
-    
-      socket.off("setup", () => {
-        socket.leave(userData._id);
-        console.log("USER DISCONNECTED");
-      });
-    });
-    
+    let users = [];
+
+const addUser = (userId, socketId) => {
+  !users.some((user) => user.userId === userId) &&
+    users.push({ userId, socketId });
+};
+
+const removeUser = (socketId) => {
+  users = users.filter((user) => user.socketId !== socketId);
+};
+
+const getUser = (userId) => {
+  return users.find((user) => user.userId === userId);
+};
+
+io.on("connection", (socket) => {
+  //when ceonnect
+  console.log("a user connected.");
+
+  //take userId and socketId from user
+  socket.on("addUser", (userId) => {
+    addUser(userId, socket.id);
+    io.emit("getUsers", users);
+  });
+
+  console.log(users)
+
+  //send and get message
+  socket.on("sendMessage", (data) => {
+    const user = getUser(data.receiver);
+    io.to(user.socketId).emit("getMessage", data);
+  });
+
+  //when disconnect
+  socket.on("disconnect", () => {
+    console.log("a user disconnected!");
+    removeUser(socket.id);
+    io.emit("getUsers", users);
+  });
+});

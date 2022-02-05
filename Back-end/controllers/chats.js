@@ -7,6 +7,7 @@ const createChat = async (req, res, next ) => {
     const createdChat = new Chat({
         conversationId : req.body.id,
         sender : req.body.sender,
+        receiver : req.body.receiver,
         message : req.body.message
     })
 

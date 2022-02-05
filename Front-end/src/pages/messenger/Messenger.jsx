@@ -1,4 +1,4 @@
-import React, {useState, useEffect,useContext} from "react";
+import React, {useState, useEffect,useContext,useRef} from "react";
 import axios from "axios";
 import io from "socket.io-client";
 import "./messenger.css";
@@ -21,9 +21,10 @@ export default function Messenger() {
   const [currentChat, setcurrentChat] = useState(null)
   const [chatData, setchatData] = useState(null)
   const [newMessage, setnewMessage] = useState(null)
+  const [ArrivalMessage, setArrivalMessage] = useState(null);
   // const [UserId, setUserId] = useState(null);
-  const [messages, setMessages] = useState([]);
-  
+  // const [messages, setMessages] = useState([]);
+  const scrollRef = useRef();
   
 
   
@@ -33,10 +34,22 @@ export default function Messenger() {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit("setup", owner?.user);
+    socket.emit("addUser", owner?.user.id);
+
+  },[]);
+
   
-    // eslint-disable-next-line
-  }, []);
+  
+  
+
+  useEffect(() => {
+    console.log("data");
+
+    console.log(ArrivalMessage);
+
+    ArrivalMessage && ( currentChat?.userId1 == ArrivalMessage.sender || currentChat?.userId1 == ArrivalMessage.receiver) && setchatData([...chatData, ArrivalMessage]);
+    console.log(chatData);
+  }, [ArrivalMessage]);
 
 
   useEffect(() => {
@@ -46,8 +59,8 @@ export default function Messenger() {
       setconversations(a.data)
 
       
-      console.log(currentChat);
-      console.log(a.data) 
+      // console.log(currentChat);
+      // console.log(a.data) 
     })
     .catch(err => console.log(err))
     
@@ -56,56 +69,57 @@ export default function Messenger() {
   // console.log(owner.user) 
   
   useEffect(() => {
-    console.log(currentChat?._id)
+    // console.log(currentChat?._id)
     
-    socket.emit("join chat", currentChat?._id);
+    // socket.emit("join chat", currentChat?._id);
     axios.get(`http://localhost:5000/chat/${currentChat?._id}`)
     .then(a => {
       setchatData(a.data)
+      // console.log(chatData)
     })
     .catch(err => console.log(err))
     
   }, [currentChat])
+
   
 
   const newMessageHandler = () => {
 
-    
-
     const postmessage = {
         id : currentChat._id,
         sender : owner?.user?.id,
+        receiver : owner?.user?.id == currentChat.userId2 ? currentChat.userId1 : currentChat.userId2,
         message : newMessage
     }
 
-    const data = {
-      ...postmessage,
-      receiverId : owner?.user?.id == currentChat.userId2 ? currentChat.userId1 : currentChat.userId2,
-    }
+    socket.emit("sendMessage", postmessage);
 
     axios.post("http://localhost:5000/chat/",postmessage)
    .then(a => {
     console.log(a.data)
-    socket.emit("new message", data);
+    // console.log("postmessage")
+    setchatData([...chatData,a.data])
   })
   .catch(err => console.log(err))
   }
 
   useEffect(() => {
-      socket.on("message recieved", (newMessageRecieved) => {
-        if (
-          !currentChat || // if chat is not selected or doesn't match current chat
-          currentChat._id !== newMessageRecieved.id
-        ) {return } 
-        else {
-          setMessages([...messages, newMessageRecieved.message]);
-        }
+    socket.on("getMessage", (data) => {
+      console.log(data,"data");
+      setArrivalMessage({
+        conversationId : data.id,
+        sender : data.sender,
+        receiver : data.receiver,
+        message : data.message
       });
     });
+  },[]);
 
-  // useEffect(() => {
-  //   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  // }, [messages]);
+  
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatData]);
 
 
 
