@@ -10,30 +10,30 @@ import { UserContext }  from "./context/userContext";
 function App() {
 
   const [user, setuser] = useState(null);
-  const [isLoggedIn, setisLoggedIn] = useState(false);
+  const [token, settoken] = useState(null);
 
-  console.log(user)
+  // console.log(user)
   
-  const login = useCallback((data) =>{
+  const login = useCallback((data,token) =>{
     setuser(data);
-  setisLoggedIn(true);
+  settoken(token);
   } ,[])
 
   const logout = useCallback((data) =>{
     setuser(null);
-    setisLoggedIn(false);
+    settoken(null);
   } ,[])
 
 
-  // if(isLoggedIn)
+  // if(token)
 
 
   return (
-    <UserContext.Provider value = {{user,login,logout}}>
+    <UserContext.Provider value = {{user,login,logout,token}}>
     <Routes>
-    <Route path = "/" element = {isLoggedIn ? <Home/> : <Login/> }/>
+    <Route path = "/" element = {!!token ? <Home/> : <Login/> }/>
       {/* <Route path = "/" element = {<Home/>}/> */}
-      <Route path = "/register" element = {isLoggedIn ? <Home/> : <Register/> }/>
+      <Route path = "/register" element = {!!token ? <Home/> : <Register/> }/>
     </Routes>
     </UserContext.Provider>
   );

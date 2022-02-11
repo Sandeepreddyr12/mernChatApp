@@ -35,13 +35,12 @@ useEffect(() => {
         email: email.current.value,
         password: password.current.value,
       }
-      console.log(user);
       setLoadin(true)
 
         axios.post("http://localhost:5000/profile/login", user)
         .then((a) => {
           // console.log(a.data);
-          login(a.data);
+          login(a.data,a.data.token);
           setLoadin(false);
         })
         .catch ((err) => {
@@ -51,7 +50,7 @@ useEffect(() => {
         });
   };
 
-  console.log(user)
+  // console.log(user)
 
 
   return (

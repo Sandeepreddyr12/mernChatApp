@@ -10,7 +10,7 @@ const UsersList = props => {
   const {user : owner} = useContext(UserContext);
 
   useEffect(() => {
-    axios.get(`http://localhost:5000/profile/${owner?.user?._id}`)
+    axios.get(`http://localhost:5000/profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner.token}`}})
     .then(a =>{
       setusers(a.data.users)
       console.log(users);
@@ -40,7 +40,7 @@ const UsersList = props => {
           id={a.id}
           // image={user.image}
           name={a.name}
-          userId = {owner?.user}
+          userId = {owner}
         />
       ))}
     </ul>

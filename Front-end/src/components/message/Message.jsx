@@ -1,13 +1,15 @@
-import "./message.css";
 // import { format } from "timeago.js";
 
+import "./message.css";
+
 export default function Message(props) {
+  console.log(props.profile);
   return (
     <div className={ props.sender ? "message own" : "message"}>
       <div className="messageTop">
         <img
           className="messageImg"
-          src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+          src={`http://localhost:5000/${props.profile}`}
           alt=""
         />
         <p className="messageText">{props.data.message}</p>

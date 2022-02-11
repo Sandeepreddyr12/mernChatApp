@@ -10,11 +10,11 @@ const UserItem = props => {
   const newConversationHandler = () =>{
     const newConversation = {
         name:`${props.name} &   ${props.userId.name}`,
-        id1:props.userId.id,
+        id1:props.userId.userId,
         id2:props.id
     }
 
-    axios.post("http://localhost:5000/",newConversation)
+    axios.post("http://localhost:5000/",newConversation, {headers : { Authorization : `Bearer ${props.userId.token}`}})
     .then((a) =>{
       console.log(a)
     })
@@ -28,7 +28,7 @@ const UserItem = props => {
           </div>
           <div className="user-item__info">
             <h2>{props.name}</h2>
-            <div on onClick={newConversationHandler}><button>+</button></div>
+            <div on onClick={newConversationHandler} className = "button"><button>+</button></div>
           </div>
         </Link>
     </li>

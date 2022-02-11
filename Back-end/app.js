@@ -1,6 +1,11 @@
+const fs = require('fs');
+const path = require('path');
+
 const express = require('express');
-const bodyparser = require('body-parser');
 const mongoose = require('mongoose');
+const bodyparser = require('body-parser');
+
+
 
 
 const conversations = require('./routes/conversations')
@@ -12,6 +17,9 @@ const HttpError = require('./models/http-error')
 const app = express();
 
 app.use(bodyparser.json());
+
+app.use('/uploads/images', express.static(path.join('uploads', 'images')));
+
 
 
 //cors handler
@@ -42,6 +50,13 @@ throw error
 //error handler
 
 app.use((err, req, res, next) =>{
+
+  if (req.file) {
+    fs.unlink(req.file.path, err => {
+      console.log(err);
+    })};
+  
+
   if(res.headerSent){
     return next(err);
   }

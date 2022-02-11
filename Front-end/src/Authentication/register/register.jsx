@@ -4,11 +4,12 @@ import { Link } from "react-router-dom";
 
 import "../login/login.css";
 import { UserContext } from '../../context/userContext';
+import ImageUpload from "../../components/imageupload/ImageUpload";
 
 
 export default function Register() {
 
-  const {user,login,logout} = useContext(UserContext);
+  const {login,logout} = useContext(UserContext);
 
   const [loading, setLoadin] = useState(false);
    
@@ -16,21 +17,35 @@ export default function Register() {
   const email = useRef();
   const password = useRef();
 
+  let image;
+  let fileIsValid;
+
+  const InputHandler = ( pickedFile, fileIsValid) =>{
+    console.log(pickedFile);
+    return (
+      image = pickedFile,
+      fileIsValid = fileIsValid
+    )
+  }
 
 
 
   const registerHandler =  (e) => {
     e.preventDefault();
-      const user = {
-        name: username.current.value,
-        email: email.current.value,
-        password: password.current.value,
-      }
-      console.log(user);
-        axios.post("http://localhost:5000/profile/signup", user)
+    console.log(image)
+     
+      const formData = new FormData();
+      formData.append('name', username.current.value);
+      formData.append('email', email.current.value);
+      formData.append('password', password.current.value);
+      formData.append('image', image);
+      
+      console.log(formData);
+
+        axios.post("http://localhost:5000/profile/signup", formData, {headers : { "Content-Type": "multipart/form-data" }})
         .then((a) => {
           console.log(a.data);
-          login(a.data)
+          login(a.data,a.data.token)
           setLoadin(false)
           // history.push("/login")
         })
@@ -55,6 +70,7 @@ export default function Register() {
               required
               ref={password}
               minLength="6" className="loginInput" />
+              <ImageUpload onInput = {(pickedFile,fileIsValid) => InputHandler(pickedFile,fileIsValid)}/>
             <button className="signinButton" type="submit">Sign Up</button>
             <button className="registerButton">
             <Link to="/"> Log into Account</Link>
