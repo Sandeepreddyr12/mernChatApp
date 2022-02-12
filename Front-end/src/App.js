@@ -29,6 +29,7 @@ function App() {
   // if(token)
 
   const { token, login, logout, user } = useAuth();
+  console.log(user)
 
   return (
     <UserContext.Provider value = {{user,login,logout,token}}>

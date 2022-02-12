@@ -6,7 +6,9 @@ const conversationSchema = new mongoose.Schema({
         },
         
         userId1 : String,
-        userId2 : String
+        profile1 : String,
+        userId2 : String,
+        profile2 : String,
         },
     { timestamps : true}
      ) 

@@ -47,13 +47,14 @@ export default function Messenger() {
     console.log(ArrivalMessage);
 
     ArrivalMessage && ( currentChat?.userId1 == ArrivalMessage.sender || currentChat?.userId1 == ArrivalMessage.receiver) && setchatData([...chatData, ArrivalMessage]);
-    console.log(chatData);
+    // console.log(chatData);
   }, [ArrivalMessage]);
 
 
   useEffect(() => {
-    
-    axios.get("http://localhost:5000/", {headers : { Authorization : `Bearer ${token}`}})
+    // console.log(owner)
+
+    axios.get(`http://localhost:5000/${owner?.userId}`, {headers : { Authorization : `Bearer ${token}`}})
     .then(a => {
       setconversations(a.data)
     })
@@ -94,6 +95,7 @@ export default function Messenger() {
     console.log(a.data)
     // console.log("postmessage")
     setchatData([...chatData,a.data])
+    setnewMessage(null)
   })
   .catch(err => console.log(err))
   }
@@ -147,7 +149,7 @@ export default function Messenger() {
             {currentChat ?  (
               <>
               {chatData.map(a =>  <div className="chatBoxTop" key={a._id}> 
-              <Message data = {a} sender = {a.sender === owner?.userId} profile = {owner?.profile}/>
+              <Message data = {a} userId = { owner?.userId} profile = {owner?.profile} conversation = {currentChat}/>
               </div>)}
                 <div className="chatBoxBottom">
                   <textarea

@@ -11,7 +11,9 @@ const UserItem = props => {
     const newConversation = {
         name:`${props.name} &   ${props.userId.name}`,
         id1:props.userId.userId,
-        id2:props.id
+        id2:props.id,
+        profile1 : props.userId.profile,
+        profile2 : props.image,
     }
 
     axios.post("http://localhost:5000/",newConversation, {headers : { Authorization : `Bearer ${props.userId.token}`}})

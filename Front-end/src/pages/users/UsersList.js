@@ -8,12 +8,13 @@ import { UserContext } from '../../context/userContext';
 const UsersList = props => {
   const [users, setusers] = useState([]);
   const {user : owner} = useContext(UserContext);
+  
 
   useEffect(() => {
     axios.get(`http://localhost:5000/profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner.token}`}})
     .then(a =>{
       setusers(a.data.users)
-      console.log(users);
+      console.log(a.data.users);
     })
     .catch(err =>{
       console.log(err)
@@ -40,6 +41,7 @@ const UsersList = props => {
           id={a.id}
           // image={user.image}
           name={a.name}
+          image = {a.image}
           userId = {owner}
         />
       ))}

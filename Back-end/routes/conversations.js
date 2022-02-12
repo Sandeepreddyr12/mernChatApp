@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.use(checkAuth)
 
-router.get('/',conversations.getConversation)
+router.get('/:id',conversations.getConversation)
 
 router.post('/',conversations.createConversation)
 
