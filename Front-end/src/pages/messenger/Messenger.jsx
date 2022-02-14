@@ -19,7 +19,7 @@ export default function Messenger() {
   const [conversations, setconversations] = useState(null)
   const [currentChat, setcurrentChat] = useState(null)
   const [chatData, setchatData] = useState(null)
-  const [newMessage, setnewMessage] = useState(null)
+  const [newMessage, setnewMessage] = useState("")
   const [ArrivalMessage, setArrivalMessage] = useState(null);
   // const [UserId, setUserId] = useState(null);
   // const [messages, setMessages] = useState([]);
@@ -95,7 +95,7 @@ export default function Messenger() {
     console.log(a.data)
     // console.log("postmessage")
     setchatData([...chatData,a.data])
-    setnewMessage(null)
+    setnewMessage("")
   })
   .catch(err => console.log(err))
   }
@@ -111,6 +111,16 @@ export default function Messenger() {
       });
     });
   },[]);
+
+  const deleteConversationHandler = (id,token) =>{
+    axios.delete(`http://localhost:5000/${id}`, {headers : { Authorization : `Bearer ${token}`}})
+    .then( a => {
+      console.log(a)
+    })
+    .catch( err =>{
+      console.log(err)
+    })
+  }
 
   
 
@@ -140,7 +150,9 @@ export default function Messenger() {
             <input placeholder="Search for friends" className="chatMenuInput" />
            
             {
-             conversations ? conversations.map(a =><div onClick={() => setcurrentChat(a)} key={a._id}><Conversation  name = {a.name}/></div>) : <div className="noConversationText">no conversations</div>
+             conversations ? conversations.map(a => <div> <div onClick={() => setcurrentChat(a)} key={a._id}><Conversation  data = {a}/></div>
+             <div on onClick={() => deleteConversationHandler(a._id, token)} className = "button"><button>-</button></div>
+             </div>) : <div className="noConversationText">no conversations</div>
             }
           </div>
         </div>
@@ -154,6 +166,7 @@ export default function Messenger() {
                 <div className="chatBoxBottom">
                   <textarea
                     className="chatMessageInput"
+                    value={newMessage}
                     onChange={(e) => setnewMessage(e.target.value)}
                     placeholder="enter msg here"
                   ></textarea>

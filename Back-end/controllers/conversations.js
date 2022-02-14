@@ -27,5 +27,27 @@ const getConversation = async (req, res) => {
     }
   }
 
+const deleteConversation = async (req,res,next) => {
+  
+  let conversation;
+
+  try{
+     conversation = await Conversation.findById(req.params.id)
+  }catch (err){
+    res.status(500).json(err);
+    next(err)
+  }
+
+  try{
+    await conversation.remove();
+    res.status(200).json("deleted conversation");
+  }catch (err){
+    res.status(500).json(err);
+    next(err)
+  }
+
+} 
+
 exports.createConversation = createConversation;
 exports.getConversation = getConversation;
+exports.deleteConversation = deleteConversation;

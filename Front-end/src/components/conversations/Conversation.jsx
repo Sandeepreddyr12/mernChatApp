@@ -19,6 +19,8 @@ export default function Conversation(props) {
   //   getUser();
   // }, [currentUser, conversation]);
 
+  
+
   return (
     // <div className="conversation">
     //   <img
@@ -32,7 +34,7 @@ export default function Conversation(props) {
     //   />
     //   <span className="conversationName">{user?.username}</span>
     <div className="conversation">
-    <div className="conversationName">{props.name}</div>
+    <div className="conversationName">{props.data.name}</div>
     </div>
   );
 }

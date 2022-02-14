@@ -10,24 +10,6 @@ import { useAuth } from "./Authentication/authHook/auth-hook";
 
 function App() {
 
-  // const [user, setuser] = useState(null);
-  // const [token, settoken] = useState(null);
-
-  // // console.log(user)
-  
-  // const login = useCallback((data,token) =>{
-  //   setuser(data);
-  // settoken(token);
-  // } ,[])
-
-  // const logout = useCallback((data) =>{
-  //   setuser(null);
-  //   settoken(null);
-  // } ,[])
-
-
-  // if(token)
-
   const { token, login, logout, user } = useAuth();
   console.log(user)
 
