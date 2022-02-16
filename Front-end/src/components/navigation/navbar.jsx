@@ -4,29 +4,24 @@ import "./navbar.css";
 
 const Navbar = () => {
 
+
+const [currentClass, setcurrentClass] = useState("")
+
+const tabSwitcher = (cssClass) => {
+  setcurrentClass(cssClass)
+  return "activeClass";
+}
+
+
+
   return (
-    <>
-      <nav className="main-nav">
-        <div className="logo">
-          <h2>
-            <span>Chit</span> Chat
-          </h2>
-        </div>
-
-        <div
-          className = "menu-link">
-          <ul>
-            <li>
-              <NavLink to="/" className={(navdata) => navdata.isActive ? "activeClass" : ''}>Home</NavLink>
-            </li>
-            <li>
-              <NavLink to="/about" className={(navdata) => navdata.isActive ? "activeClass" : ''}>about</NavLink>
-            </li>
-          </ul>
-        </div>
-      </nav>
-
-    </>
+    <div className="navbar">
+  <ul className= {currentClass}>
+  <li><NavLink to="/" className={(navdata) => navdata.isActive ? tabSwitcher("chats"): ''}>Chats</NavLink></li>
+  <li><NavLink to="/people" className={(navdata) => navdata.isActive ? tabSwitcher("people") : ''}>People</NavLink></li>
+  <li><NavLink to="/profile" className={(navdata) => navdata.isActive ?  tabSwitcher("profile") : ''}>Profile</NavLink></li>
+</ul>
+</div>
   );
 };
 
