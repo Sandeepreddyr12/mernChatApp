@@ -21,9 +21,7 @@ a, a:hover {
   padding: 50px 20px;
   padding-top: 100px;
   display: flex;
-  background-image: linear-gradient(-20deg, #ff2846 0%, #6944ff 100%);
-  display: flex;
-  background-image: linear-gradient(-20deg, #ff2846 0%, #6944ff 100%);
+  background-color: antiquewhite;
 }
 @media screen and (max-width: 768px) {
   .wrapper {
@@ -65,7 +63,7 @@ a, a:hover {
   border-radius: 50%;
   overflow: hidden;
   position: relative;
-  z-index: 4;
+  /* z-index: 4; */
   box-shadow: 0px 5px 50px 0px #6c44fc, 0px 0px 0px 7px rgba(107, 74, 255, 0.5);
 }
 @media screen and (max-width: 576px) {

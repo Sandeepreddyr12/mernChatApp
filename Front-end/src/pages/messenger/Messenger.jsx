@@ -10,7 +10,7 @@ import { UserContext } from "../../context/userContext";
 
 
 let socket;
-  const ENDPOINT = "http://localhost:5000";
+  const ENDPOINT = "http://localhost:5000"; 
 
 export default function Messenger() {
   

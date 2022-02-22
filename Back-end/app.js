@@ -53,7 +53,7 @@ app.use((err, req, res, next) =>{
 
   if (req.file) {
     fs.unlink(req.file.path, err => {
-      console.log(err);
+      console.log(err,"line 56 app js");
     })};
   
 

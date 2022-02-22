@@ -1,0 +1,149 @@
+
+
+  
+  .our-team {
+    width: 15rem;
+    height: 22rem;
+    padding: 2em 0 4em;
+    margin-bottom: 5rem;
+    background-color: #f7f5ec;
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    border: 3px solid #1369ce;
+    border-radius: 1rem;
+  }
+  
+  .our-team .picture {
+    display: inline-block;
+    height: 10em;
+    width: 10em;
+    margin-bottom: 1.8em;
+    z-index: 1;
+    position: relative;
+  }
+  
+  .our-team .picture::before {
+    content: "";
+    width: 100%;
+    height: 0;
+    border-radius: 50%;
+    background-color: #1369ce;
+    position: absolute;
+    bottom: 135%;
+    right: 0;
+    left: 0;
+    opacity: 0.9;
+    transform: scale(3);
+    transition: all 0.3s linear 0s;
+  }
+  
+  .our-team:hover .picture::before {
+    height: 100%;
+  }
+  
+  .our-team .picture::after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #1369ce;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+  }
+  
+  .our-team .picture img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transform: scale(1);
+    transition: all 0.9s ease 0s;
+  }
+  
+  .our-team:hover .picture img {
+    box-shadow: 0 0 0 14px #f7f5ec;
+    transform: scale(0.7);
+  }
+
+  .team-content{
+    margin-top: 1rem;
+    transition: all 0.4s linear 0s;
+  }
+  .team-content .name{
+    font-size: 1.2em;
+    text-transform: capitalize;
+    margin-bottom: 0.7rem;
+  }
+  
+  .team-content .title {
+    display: block;
+    font-size: 15px;
+    color: #4e5052;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+  }
+  
+  .our-team .social {
+    width: 100%;
+    /* height: 4em; */
+    padding: .7em;
+    margin: 0;
+    background-color: #1369ce;
+    position: absolute;
+    bottom: -100px;
+    left: 0;
+    transition: all 0.5s ease 0s;
+  }
+  
+  .our-team:hover .social {
+    bottom: 0;
+  }
+
+  .our-team:hover .team-content{
+  margin-top: 0;
+  }
+  
+
+.social button  {
+  appearance: none;
+  background-color: #000000;
+  border: 2px solid #1A1A1A;
+  border-radius: 1em;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-block;
+  font-family: Roobert,-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: normal;
+  margin: 0;
+  min-height: 2rem;
+  min-width: 8rem;
+  outline: none;
+  padding: .5em 1.6em;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 90%;
+  will-change: transform;
+}
+
+.social button :disabled {
+  pointer-events: none;
+}
+
+.social button :hover {
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.social button :active {
+  box-shadow: none;
+  transform: translateY(0);
+}

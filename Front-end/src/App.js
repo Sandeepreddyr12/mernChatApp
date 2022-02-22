@@ -6,6 +6,8 @@ import Login from "./Authentication/login/Login";
 import Register from "./Authentication/register/register";
 import Home from "./home/Home";
 import Profile from "./pages/profile/profile";
+// import People from "./pages/people/component/people";
+import Users from "./pages/people/Users";
 import { UserContext }  from "./context/userContext";
 import { useAuth } from "./Authentication/authHook/auth-hook";
 import Navbar from "./components/navigation/navbar";
@@ -21,6 +23,7 @@ function App() {
     <Routes>
     <Route path = "/" element = {!!token ? <Home/> : <Login/> }/>
        <Route path = "/profile" element = {<Profile/>}/>
+       <Route path = "/people" element = {<Users/>}/>
       <Route path = "/register" element = {!!token ? <Home/> : <Register/> }/> 
     </Routes>
     </UserContext.Provider>

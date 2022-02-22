@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -162,6 +164,88 @@ const login = async (req, res, next) => {
   });
 };
 
+
+// updating user patch request
+
+
+
+const updateUser = async (req, res, next) => {
+
+  console.log("update user patch")
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError('Invalid inputs passed, please check your data.', 422)
+    );
+  }
+  const { name } = req.body;
+
+  let userId = req.params.id;
+  let existingUser;
+
+  try {
+    existingUser = await User.findById(userId);
+  } catch (err) {
+    const error = new HttpError(
+      'Updating user failed, please try again later.,findbyid',
+      500
+    );
+    return next(error);
+  }
+
+
+  const imagePath = existingUser.image
+
+ 
+
+    existingUser.name = name;
+    existingUser.image = req?.file?.path;
+
+    
+  try {
+    await existingUser.save();
+  } catch (err) {
+    console.log(err)
+    const error = new HttpError(
+      err + 'Updating User failed, please try again later.,save',
+      500
+    );
+    return next(error);
+  }
+
+  if (req.file) {
+    fs.unlink(imagePath, (err) => {
+      if (err) {
+          console.log(err,"unlink error");
+      }
+      console.log('deleted');
+  })};
+
+  let token;
+  try {
+    token = jwt.sign(
+      { userId: existingUser.id, email: existingUser.email },
+      'supersecret_dont_share',
+      { expiresIn: '1h' }
+    );
+  } catch (err) {
+    const error = new HttpError(
+      'updating failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  res
+  .status(201)
+  .json({ userId: existingUser.id,name : existingUser.name, profile : existingUser.image, email: existingUser.email, token: token });
+};
+  
+
+
+
 exports.getUsers = getUsers;
 exports.signup = signup;
 exports.login = login;
+exports.updateUser = updateUser;

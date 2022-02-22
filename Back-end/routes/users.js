@@ -29,7 +29,20 @@ router.post(
     router.post('/login', Users.login);
     
     router.use(checkAuth)
+    
+    router.patch('/:id', 
+    fileUpload.single('image'),
+    [
+      check('name')
+        .not()
+        .isEmpty(),
+      ],
+      Users.updateUser
+      );
+      
 
     router.get('/:id', Users.getUsers);
+
+    
 
     module.exports = router;
