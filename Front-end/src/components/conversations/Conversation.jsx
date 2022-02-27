@@ -22,19 +22,16 @@ export default function Conversation(props) {
   
 
   return (
-    // <div className="conversation">
-    //   <img
-    //     className="conversationImg"
-    //     src={
-    //       user?.profilePicture
-    //         ? PF + user.profilePicture
-    //         : PF + "person/noAvatar.png"
-    //     }
-    //     alt=""
-    //   />
-    //   <span className="conversationName">{user?.username}</span>
     <div className="conversation">
-    <div className="conversationName">{props.data.name}</div>
+    <div class="leaderboard">
+  
+  <div class="leaderboard__profiles">
+    <div class="leaderboard__profile">
+      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mark Zuckerberg" class="leaderboard__picture"/>
+      <span class="leaderboard__name">{props.data.name}</span>
+    </div>
+  </div>
+</div>
     </div>
   );
 }

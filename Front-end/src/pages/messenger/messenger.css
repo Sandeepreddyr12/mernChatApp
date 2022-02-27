@@ -14,6 +14,7 @@
   padding: 10px 0;
   border: none;
   border-bottom: 1px solid gray;
+  margin-bottom: 1.5rem;
 }
 
 .chatBox {
@@ -71,11 +72,30 @@
   height: 100%;
 }
 
+.conversations{
+  display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  align-items: center;
+}
+.conversations .button button{
+  border: none;
+  cursor: pointer;
+  } 
+
+.conversations button:hover{
+  transform: rotate(90deg) scale(1.3);
+  color: red;
+  transition: all .25s ease;
+}
+
+
+
 .noConversationText {
   position: absolute;
   top: 10%;
   font-size: 50px;
-  color: rgb(224, 220, 220);
+  color: #ca8d8d;
   cursor: default;
 }
 

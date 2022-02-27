@@ -150,8 +150,8 @@ export default function Messenger() {
             <input placeholder="Search for friends" className="chatMenuInput" />
            
             {
-             conversations ? conversations.map(a => <div> <div onClick={() => setcurrentChat(a)} key={a._id}><Conversation  data = {a}/></div>
-             <div on onClick={() => deleteConversationHandler(a._id, token)} className = "button"><button>-</button></div>
+             conversations ? conversations.map(a => <div className="conversations"> <div onClick={() => setcurrentChat(a)} key={a._id}><Conversation  data = {a}/></div>
+             <div on onClick={() => deleteConversationHandler(a._id, token)} className = "button"><button>❌</button></div>
              </div>) : <div className="noConversationText">no conversations</div>
             }
           </div>
@@ -182,9 +182,9 @@ export default function Messenger() {
             )} 
           </div>
         </div>
-        <div className="users">
+        {/* <div className="users">
                 <UsersList/>
-        </div>
+        </div> */}
       </div>
     </>
   );

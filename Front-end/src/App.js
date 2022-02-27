@@ -19,6 +19,7 @@ function App() {
 
   return (
     <UserContext.Provider value = {{user,login,logout,token}}>
+      <div  style={{backgroundColor : "#ecc7c7"}}>
       <Navbar/>
     <Routes>
     <Route path = "/" element = {!!token ? <Home/> : <Login/> }/>
@@ -26,6 +27,7 @@ function App() {
        <Route path = "/people" element = {<Users/>}/>
       <Route path = "/register" element = {!!token ? <Home/> : <Register/> }/> 
     </Routes>
+    </div>
     </UserContext.Provider>
   );
 }
