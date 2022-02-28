@@ -89,7 +89,7 @@
 }
 
 .navbar a:hover{
-  color: rgb(223, 68, 68);
+  opacity: .75a;
 }
 
 .navbar .activeClass{

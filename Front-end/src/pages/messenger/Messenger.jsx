@@ -131,24 +131,17 @@ export default function Messenger() {
 
 
 
-  
-
- 
-
-
   return (
     <>
-    <div style={{marginTop : "20px", }}>
-      {/* <input type="text" placeholder="enter id here" 
-        onChange={(e) => setUserId(e.target.value)}
-      /> */}
-      <div>hi there I'm {owner?.name}</div>
+    <div className="userProfile">
+       <div className ="profile_img">
+      <img src= {`http://localhost:5000/${owner?.profile}`} alt="profile card"/>
+    </div>
+      <div className="title">{owner?.name} here</div>
     </div>
       <div className="messenger">
         <div className="chatMenu">
-          <div className="chatMenuWrapper">
-            <input placeholder="Search for friends" className="chatMenuInput" />
-           
+          <div className="chatMenuWrapper">           
             {
              conversations ? conversations.map(a => <div className="conversations"> <div onClick={() => setcurrentChat(a)} key={a._id}><Conversation  data = {a}/></div>
              <div on onClick={() => deleteConversationHandler(a._id, token)} className = "button"><button>❌</button></div>

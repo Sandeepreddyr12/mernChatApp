@@ -64,7 +64,6 @@ export default function Profile() {
 
 
   return (
-    <div>
         <div className ="wrapper">
   <div className ="profile-card js-profile-card">
     <div className ="profile-card__img">
@@ -98,6 +97,5 @@ export default function Profile() {
   </div>
 
 </div>
-    </div>
   )
 }

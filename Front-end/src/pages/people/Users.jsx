@@ -3,20 +3,25 @@ import axios from 'axios';
 
 import { UserContext } from '../../context/userContext';
 import People from './component/people';
+import Spinner from '../../components/spinner/Spinner';
 import './users.css'
 
 const Users = props => {
   const [users, setusers] = useState([]);
+  const [loading, setloading] = useState(false)
   const {user : owner} = useContext(UserContext);
   
 
   useEffect(() => {
+    setloading(true)
     axios.get(`http://localhost:5000/profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner?.token}`}})
     .then(a =>{
       setusers(a.data.users)
-      console.log(a.data.users);
+      setloading(false)
+      // console.log(a.data.users);
     })
     .catch(err =>{
+      setloading(false)
       console.log(err)
     })
     
@@ -33,7 +38,9 @@ const Users = props => {
     );
   }
 
-  return (
+  let people;
+
+  people = loading ? <Spinner/> : (
     <div className="PeopleContainer">
       {users.map(a => (
          <People
@@ -47,6 +54,8 @@ const Users = props => {
       ))}
     </div>
   );
+
+  return people
 };
 
 
