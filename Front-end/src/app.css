@@ -1,0 +1,27 @@
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+.thin::-webkit-scrollbar {
+    width: 2px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background: #eee;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background: #888;
+}
+::-webkit-scrollbar-thumb:window-inactive {
+    background: rgba(100,100,100,0.4); 
+}
+
+html{
+    scrollbar-width: thin;
+    scrollbar-color: rgba(82, 76, 76, 0.4) #eee;
+}
+
+

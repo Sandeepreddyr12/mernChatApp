@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
 const Conversation = require('../models/conversations');
+const HttpError = require('../models/http-error');
+
 
 
 
@@ -12,18 +14,30 @@ const createConversation = async (req,res,next) =>{
         profile1 : req.body.profile1,
         profile2 : req.body.profile2,
     })  
+    let result;
+    try{
+      result = await createdConversation.save();
+    }catch (err) {
+      const error = new HttpError(
+        'Creating Conversation failed.',
+        500
+      );
+      return next(error);
+    }
 
-    const result = await createdConversation.save();
-    res.json(result)
+    res.status(201).json(result)
 }
 
-const getConversation = async (req, res) => {
+//-------
+
+const getConversation = async (req, res,next) => {
   // console.log(req.params.id,"ssssss")
     try {
       const conversation = await Conversation.find({$or : [{userId1 : req.params.id},{userId2 : req.params.id}]});
       res.status(200).json(conversation);
     } catch (err) {
       res.status(500).json(err);
+      next(err)
     }
   }
 

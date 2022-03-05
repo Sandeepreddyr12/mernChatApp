@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 
-const Chat = require('../models/chats')
+const Chat = require('../models/chats');
+const HttpError = require('../models/http-error');
+
 
 
 const createChat = async (req, res, next ) => {
@@ -10,19 +12,34 @@ const createChat = async (req, res, next ) => {
         receiver : req.body.receiver,
         message : req.body.message
     })
-
-    const result = await createdChat.save();
-    res.json(result)
+    let result;
+    try{
+        result = await createdChat.save();
+    }catch (err) {
+        const error = new HttpError(
+          'sending message failed.',
+          500
+        );
+        return next(error);
+      }
+   
+    res.status(201).json(result)
 }
 
 
-const getChat = async (req, res) =>{
+const getChat = async (req, res,next) =>{
+    let chat;
     try{
-    const chat = await Chat.find({conversationId : req.params.id });
-    res.status(200).json(chat);
-    } catch(err){
-        res.status(500).json(err)
-    }
+    chat = await Chat.find({conversationId : req.params.id });
+    } catch (err) {
+    const error = new HttpError(
+      'getting chats failed.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json(chat);
 }
 
 exports.createChat = createChat;

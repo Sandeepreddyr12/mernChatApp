@@ -2,7 +2,11 @@ import {useRef,useState,useContext} from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
+import { toast } from "react-toastify";
+
+
 import "../login/login.css";
+import Spinner from "../../components/spinner/Spinner";
 import { UserContext } from '../../context/userContext';
 import ImageUpload from "../../components/imageupload/ImageUpload";
 
@@ -11,7 +15,7 @@ export default function Register() {
 
   const {login,logout} = useContext(UserContext);
 
-  const [loading, setLoadin] = useState(false);
+  const [loading, setLoading] = useState(false);
    
   const username = useRef();
   const email = useRef();
@@ -40,25 +44,32 @@ export default function Register() {
       formData.append('password', password.current.value);
       formData.append('image', image);
       
-      console.log(formData);
+      setLoading(true)
+
+      toast.loading("wait a moment ⌛, ur about to join us");
+
 
         axios.post("http://localhost:5000/profile/signup", formData, {headers : { "Content-Type": "multipart/form-data" }})
         .then((a) => {
           console.log(a.data);
           login(a.data,a.data.token)
-          setLoadin(false)
+          setLoading(false)
           // history.push("/login")
+          toast.dismiss();
+        toast.success(`welcome ${a?.data?.name ? a?.data?.name : 'here'} , thank u joining us`);
         })
         .catch ((err) => {
           logout(null)
-          setLoadin(false)
-        console.log(err);
+          setLoading(false)
+          toast.dismiss();
+          toast.error( `${err?.response?.data?.message}  😫`)
         });
   };
 
-  return (
-    <div className="login">
-          <form className="loginBox" onSubmit={registerHandler}>
+
+  let formComponent= (
+    <>
+    <span className='header'>Sign.Up Here</span>
             <input placeholder="Username" ref={username} className="loginInput" />
             <input  placeholder="Email"
               type="email"
@@ -72,9 +83,23 @@ export default function Register() {
               minLength="6" className="loginInput" />
               <ImageUpload onInput = {(pickedFile,fileIsValid) => InputHandler(pickedFile,fileIsValid)}/>
             <button className="signinButton" type="submit">Sign Up</button>
-            <button className="registerButton">
+            <button className="registerButton" type='button'>
             <Link to="/"> Log into Account</Link>
             </button>
+    </>
+  )
+
+  if(loading){
+    formComponent =<Spinner/>
+  }
+  
+
+
+
+  return (
+    <div className="login">
+          <form className="loginBox" onSubmit={registerHandler}>
+          {formComponent}
           </form>
     </div>
   );

@@ -1,33 +1,43 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState,useContext } from "react";
 import axios from "axios";
+
+
 import "./conversation.css";
+import { UserContext } from "../../context/userContext";
 
 export default function Conversation(props) {
   // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
-  // useEffect(() => {
-  //   const friendId = conversation.senderId;
+  const [User, setUser] = useState(null)
+  const [activeStyle, setactiveStyle] = useState({})
 
-  //   const getUser = async () => {
-  //     try {
-  //       const res = await axios("/users?userId=" + friendId);
-  //       setUser(res.data);
-  //     } catch (err) {
-  //       console.log(err);
-  //     }
-  //   };
-  //   getUser();
-  // }, [currentUser, conversation]);
+  const {user : owner} = useContext(UserContext);
 
-  
+  let ID = owner?.userId === props.data?.userId1 ? props.data?.userId2 : props.data?.userId1
+
+  useEffect(() => {
+
+
+
+    const getUser = async () => {
+      try {
+        const res = await axios(`http://localhost:5000/profile/user/${ID}`, {headers : { Authorization : `Bearer ${owner?.token}`}});
+        setUser(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getUser();
+  }, []);
+
+  //style={props.activeStyle ? {borderLeft : "3px solid red"} : {}}
 
   return (
-    <div className="conversation">
+    <div className="conversation" style={activeStyle} onClick={()=> setactiveStyle({borderLeft : "3px solid red"})}>
     <div class="leaderboard">
-  
   <div class="leaderboard__profiles">
     <div class="leaderboard__profile">
-      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Mark Zuckerberg" class="leaderboard__picture"/>
+      <img src={`http://localhost:5000/${User?.image}`} alt="" class="leaderboard__picture"/>
       <span class="leaderboard__name">{props.data.name}</span>
     </div>
   </div>

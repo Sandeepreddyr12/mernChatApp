@@ -8,6 +8,11 @@ const jwt = require('jsonwebtoken');
 const HttpError = require('../models/http-error');
 const User = require('../models/users');
 
+
+//-----------get users--------------
+
+
+
 const getUsers = async (req, res, next) => {
   let users;
   try {
@@ -19,8 +24,31 @@ const getUsers = async (req, res, next) => {
     );
     return next(error);
   }
-  res.json({ users: users.map(user => user.toObject({ getters: true })) });
+  res.status(200).json({ users: users.map(user => user.toObject({ getters: true })) });
 };
+
+
+
+//--------------- get user------
+
+const getUser = async (req, res, next) => {
+  let users;
+  try {
+    users = await User.findById({_id : req.params.id} , '-password');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching user failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+  res.status(200).json(users);
+};
+
+
+//----------sign up-----
+
+
 
 const signup = async (req, res, next) => {
   // console.log(req);
@@ -94,10 +122,15 @@ const signup = async (req, res, next) => {
     return next(error);
   }
 
-  res
+    res
     .status(201)
     .json({ userId: createdUser.id,name : createdUser.name, profile : createdUser.image, email: createdUser.email, token: token });
   };
+
+
+  //-----------------login ----------------
+
+
 
 const login = async (req, res, next) => {
   const { email, password } = req.body;
@@ -117,7 +150,7 @@ const login = async (req, res, next) => {
   if (!existingUser) {
     const error = new HttpError(
       'Invalid credentials, could not log you in.',
-      401
+      403
     );
     return next(error);
   }
@@ -155,7 +188,7 @@ const login = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({
+  res.status(200).json({
     userId: existingUser.id,
     email: existingUser.email,
     name : existingUser.name,
@@ -165,7 +198,8 @@ const login = async (req, res, next) => {
 };
 
 
-// updating user patch request
+
+// ------updating user //patch request--------
 
 
 
@@ -197,7 +231,6 @@ const updateUser = async (req, res, next) => {
 
   const imagePath = existingUser.image
 
- 
 
     existingUser.name = name;
     existingUser.image = req?.file?.path;
@@ -246,6 +279,7 @@ const updateUser = async (req, res, next) => {
 
 
 exports.getUsers = getUsers;
+exports.getUser = getUser;
 exports.signup = signup;
 exports.login = login;
 exports.updateUser = updateUser;

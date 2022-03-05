@@ -1,6 +1,9 @@
 import axios from "axios";
+import { toast } from "react-toastify";
+
 
 import "./people.css";
+
 
 const people = (props) => {
   const newConversationHandler = () => {
@@ -17,10 +20,12 @@ const people = (props) => {
         headers: { Authorization: `Bearer ${props.userId.token}` },
       })
       .then((a) => {
-        console.log(a);
+        // console.log(a)
+        toast.success(`U-R Now Connected With ${props.name} `,{position: "bottom-center",theme : 'dark', autoClose: 2000});
       })
       .catch((err) => {
         console.log(err);
+          toast.error( `Connection Failed  😫`, {autoClose: 2000})
       });
   };
   return (

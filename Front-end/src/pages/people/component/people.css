@@ -12,6 +12,7 @@
     position: relative;
     border: 3px solid #1369ce;
     border-radius: 1rem;
+    margin: 1em;
   }
   
   .our-team .picture {

@@ -16,8 +16,7 @@ a, a:hover {
 .wrapper {
   width: 100%;
   width: 100%;
-  height: auto;
-  min-height: 100vh;
+  min-height: calc(100vh - 5rem);
   padding: 50px 20px;
   padding-top: 100px;
   display: flex;
@@ -175,4 +174,28 @@ a, a:hover {
 .profile-card__button.button--orange:hover {
   box-shadow: 0px 7px 30px rgba(223, 45, 70, 0.75);
 }
+
+.Modal {
+  position: absolute;
+  width: 35rem;
+    top:3rem;
+    bottom: 3rem;
+    left: 0;
+    right: 0;
+    
+    margin: auto;
+}
+
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, .4);
+  backdrop-filter: blur(10px);
+  z-index: 5;
+}
+
 

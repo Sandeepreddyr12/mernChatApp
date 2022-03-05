@@ -1,29 +1,67 @@
+.backgroundTxt{
+  font-size:2rem;
+  left: 2rem;
+  font-weight:900;
+  color:#1b0303;
+  position:absolute;
+  /* z-index:-1; */
+  transform: rotate(-30deg);
+}
+
+.backgroundTxt span{
+  font-size: 4rem;
+}
+
 .login {
   width: 100vw;
   height: 100vh;
   background-color: #f0f2f5;
+  background-image: linear-gradient(45deg, transparent 20%, black 25%, transparent 25%), 
+                    linear-gradient(-45deg, transparent 20%, black 25%, transparent 25%), 
+                    linear-gradient(-45deg, transparent 75%, black 80%, transparent 0),
+                    radial-gradient(gray 2px, transparent 0);
+  background-size: 30px 30px, 30px 30px;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  border-radius: 10px;
 }
 
 .loginBox {
+  z-index: 1;
   width: 400px;
-  height: 400px;
-  padding: 20px;
+  /* height: 530px; */
+  max-width: 92%;
+  max-height: 90%;
+  padding: 1.5em;
   background-color: white;
-  border-radius: 10px;
+  /* border-radius: 1.2rem; */
+  border-bottom-right-radius: 1.5rem;
+  border-bottom-left-radius: 1.5rem;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  border-top: 7px solid purple;
+}
+
+.loginBox .header{
+  	font-family: 'Dancing Script', cursive;
+	font-size: 1.6rem;
+	margin-bottom: 30px;
+  color: rgb(105, 248, 39);
+  font-weight: 900;
+  text-transform: capitalize;
 }
 
 .loginInput {
-  height: 50px;
-  border-radius: 10px;
+  height: 3.7rem;
+  border-radius: 1.2rem;
   border: 1px solid gray;
-  font-size: 18px;
+  font-size: 1.1rem;
   padding-left: 20px;
+  margin-bottom: 1rem;
 }
 
 .loginInput:focus {
@@ -31,25 +69,26 @@
 }
 
 .signinButton {
-  height: 50px;
-  border-radius: 100px;
+  height: 3.3rem;
+  border-radius: 5rem;
   border: none;
   background-color: #0ec268;
   color: white;
-  font-size: 20px;
+  font-size: 1.2rem;
   font-weight: 600;
   cursor: pointer;
+  margin-bottom: 1rem;
 }
 
 .registerButton {
   width: 60%;
   align-self: center;
-  height: 50px;
+  height: 3.3rem;
   border-radius: 10px;
   border: none;
   background-color: #ca4a50;
   
-  font-size: 20px;
+  font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
 }
@@ -57,4 +96,15 @@
 .registerButton a{
   color: white;
   text-decoration: none;
+   display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.loginBox button:hover{
+  transition: all 250ms;
+  transform: scale(1.05) rotate(-1deg);
 }

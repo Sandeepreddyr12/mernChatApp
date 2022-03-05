@@ -41,6 +41,8 @@ router.post(
       );
       
 
+      router.get('/user/:id', Users.getUser);
+      
     router.get('/:id', Users.getUsers);
 
     

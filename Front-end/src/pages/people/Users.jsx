@@ -14,6 +14,7 @@ const Users = props => {
 
   useEffect(() => {
     setloading(true)
+
     axios.get(`http://localhost:5000/profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner?.token}`}})
     .then(a =>{
       setusers(a.data.users)
@@ -30,32 +31,38 @@ const Users = props => {
   // console.log(users)
   // console.log(user, "user")
 
-  if (users.length === 0) {
-    return (
-      <div className="center">
-          <h2>No users found.</h2>
-      </div>
-    );
-  }
+  // if (users.length === 0) {
+  //   return (
+  //     <div className="center">
+  //         <h2>No users found.</h2>
+  //     </div>
+  //   );
+  // }
 
-  let people;
+  let people = (users.length ? (users.map(a => (
+    <People
+     key={a.id}
+     id={a.id}
+     // image={user.image}
+     name={a.name}
+     image = {a.image}
+     userId = {owner}
+   />
+ ))) : (
+  <div className="center">
+      <h2>No users found.</h2>
+  </div>
+) )
 
-  people = loading ? <Spinner/> : (
+ if(loading){
+   people = <Spinner/>
+ }
+return (
     <div className="PeopleContainer">
-      {users.map(a => (
-         <People
-          key={a.id}
-          id={a.id}
-          // image={user.image}
-          name={a.name}
-          image = {a.image}
-          userId = {owner}
-        />
-      ))}
+      {people}
     </div>
   );
 
-  return people
 };
 
 

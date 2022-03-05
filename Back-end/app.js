@@ -6,8 +6,6 @@ const mongoose = require('mongoose');
 const bodyparser = require('body-parser');
 
 
-
-
 const conversations = require('./routes/conversations')
 const chats = require('./routes/chats')
 const profile = require('./routes/users')
@@ -53,7 +51,7 @@ app.use((err, req, res, next) =>{
 
   if (req.file) {
     fs.unlink(req.file.path, err => {
-      console.log(err,"line 56 app js");
+      console.log(err,"line 56 app js");// error 
     })};
   
 
@@ -95,7 +93,7 @@ const getUser = (userId) => {
 };
 
 io.on("connection", (socket) => {
-  //when ceonnect
+  //when connect
   console.log("a user connected.");
 
   //take userId and socketId from user

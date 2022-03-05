@@ -1,18 +1,22 @@
 import {useContext,useState,useRef} from 'react'
 import Modal from 'react-modal';
 import axios from "axios";
+import { toast } from "react-toastify";
+
 
 
 import { UserContext } from '../../context/userContext'
 import ImageUpload from '../../components/imageupload/ImageUpload';
 import './profile.css'
+import Spinner from '../../components/spinner/Spinner';
+
 
 export default function Profile() {
 
   const {user,login,logout,token} = useContext(UserContext);
 
   const [modal, setmodal] = useState(false)
-  const [loading, setLoadin] = useState(false);
+  const [loading, setLoading] = useState(false);
 
 
   const username = useRef();
@@ -20,7 +24,6 @@ export default function Profile() {
   let fileIsValid;
 
   const InputHandler = ( pickedFile, fileIsValid) =>{
-    console.log(pickedFile);
     return (
       image = pickedFile,
       fileIsValid = fileIsValid
@@ -42,25 +45,42 @@ export default function Profile() {
       formData.append('name', username.current.value);
       formData.append('image', image);
       
-      console.log(formData);
+      setLoading(true)
 
         axios.patch(`http://localhost:5000/profile/${user?.userId}`, formData, {headers : { "Content-Type": "multipart/form-data", Authorization : `Bearer ${token}` }})
         .then((a) => {
           console.log(a.data);
           login(a.data,a.data.token)
-          setLoadin(false)
+          setLoading(false)
           setmodal(false)
+          toast.dismiss()
+          toast.success(`Update Successful`,{position: "bottom-center",theme : 'dark', autoClose: 2000});
         })
         .catch ((err) => {
-          // logout(null)
-          setLoadin(false)
+        setLoading(false)
         console.log(err);
         setmodal(false)
+        toast.dismiss()
+        toast.error( `${err?.response?.data?.message}  😫`)
         });
   };
 
 
+    let formComponent = (
+      <>
+        <span className='header'>Update Profile </span>
+        <input placeholder="Username" ref={username} type = "text" className="loginInput" />
+        <ImageUpload onInput = {(pickedFile,fileIsValid) => InputHandler(pickedFile,fileIsValid)}/>
+        <button className="signinButton" type="submit">Update</button>
+        <button className="registerButton" onClick={() => {setmodal(false)}}>
+        Cancel
+        </button>
+      </>
+    )
   
+    if(loading){
+      formComponent = <Spinner/>
+    }
 
 
   return (
@@ -74,15 +94,11 @@ export default function Profile() {
       <div className ="profile-card__name">{user?.name || "guest"}</div>
       <div className ="profile-card__txt">Mern stack developer <strong>India</strong></div>
 
-    <Modal isOpen = {modal} onRequestClose = {() =>{setmodal(false)}}>
-    <div className="login">
+    <Modal isOpen = {modal} onRequestClose = {() =>{setmodal(false)}}   className="Modal"
+           overlayClassName="Overlay">
+    <div className="login" style={{width : "100%", height : "100%",background : "white"}}>
           <form className="loginBox" onSubmit={updateHandler}>
-            <input placeholder="Username" ref={username} type = "text" className="loginInput" />
-              <ImageUpload onInput = {(pickedFile,fileIsValid) => InputHandler(pickedFile,fileIsValid)}/>
-            <button className="signinButton" type="submit">Update</button>
-            <button className="registerButton" onClick={() => {setmodal(false)}}>
-            Cancel
-            </button>
+          {formComponent}
           </form>
     </div>
     </Modal>
