@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Conversation = require('../models/conversations');
+const Chat = require('../models/chats')
 const HttpError = require('../models/http-error');
 
 
@@ -51,14 +52,37 @@ const deleteConversation = async (req,res,next) => {
     res.status(500).json(err);
     next(err)
   }
+  
+
+  if(!conversation){
+    const error = new HttpError(
+      'finding Conversation failed.',
+      500
+    );
+    return next(error);
+  }
+
+
+  try {
+     await Chat.deleteMany({conversationId : req.params.id});
+    res.status(200);
+  } catch (err) {
+    res.status(500).json(err);
+    next(err)
+  }
+
 
   try{
     await conversation.remove();
     res.status(200).json("deleted conversation");
+    console.log("deleted conversation")
+
   }catch (err){
     res.status(500).json(err);
     next(err)
   }
+
+  
 
 } 
 

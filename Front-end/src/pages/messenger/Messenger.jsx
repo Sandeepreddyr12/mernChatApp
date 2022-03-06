@@ -2,6 +2,9 @@ import React, { useState, useEffect, useContext,useCallback } from "react";
 import axios from "axios";
 import io from "socket.io-client";
 import { Link } from "react-router-dom";
+import Modal from 'react-modal';
+import { toast } from "react-toastify";
+
 
 
 import "./messenger.css";
@@ -22,7 +25,9 @@ export default function Messenger() {
   const [newMessage, setnewMessage] = useState("");
   const [ArrivalMessage, setArrivalMessage] = useState(null);
   const [fakeState, setfakeState] = useState(null);
-  const [loding, setloding] = useState(false);
+  const [loading, setloading] = useState(false);
+  const [modal, setmodal] = useState(false)
+  const [XbtnId, setXbtnId] = useState()
   // const [UserId, setUserId] = useState(null);
 
   const { user: owner, token } = useContext(UserContext);
@@ -52,7 +57,7 @@ export default function Messenger() {
 
   useEffect(() => {
     // console.log(owner)
-    setloding(true);
+    setloading(true);
 
     axios
       .get(`http://localhost:5000/${owner?.userId}`, {
@@ -60,11 +65,11 @@ export default function Messenger() {
       })
       .then((a) => {
         setconversations(a.data);
-        setloding(false);
+        setloading(false);
       })
       .catch((err) => {
         console.log(err);
-        setloding(false);
+        setloading(false);
       });
   }, [fakeState]);
 
@@ -120,27 +125,39 @@ export default function Messenger() {
     });
   }, []);
 
+
+
+
+
   const deleteConversationHandler = (id, token) => {
+
+
+    
+
+    setloading(true);
     axios
       .delete(`http://localhost:5000/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((a) => {
         setfakeState(a);
+        setloading(false);
+        setmodal(false)
+        toast.dismiss();
+        toast.success(`Conversation Deleted`);
+        if(currentChat?._id === id){setcurrentChat(null)}
       })
       .catch((err) => {
-        console.log(err);
+        setmodal(false)
+        setloading(false);
+        toast.dismiss();
+        toast.error( `error occured.... 😫`)
+        // console.log(err);
       });
   };
 
 
-  
 
-
-// let activeStyless = currentChat ? {
-//   borderLeft : "3px solid red"
-// } : ""
-//style = {activeStyless}
 
   let conversationss = conversations?.length ? (
     conversations.map((a) => (
@@ -148,11 +165,31 @@ export default function Messenger() {
         <div onClick={() => setcurrentChat(a)} key={a._id}>
           <Conversation data={a}/>
         </div>
+        <Modal isOpen = {modal} onRequestClose = {() =>{setmodal(false)}}   className="Modal"
+           overlayClassName="Overlay">
+             {
+               !loading  ? (
+                <div className="modalbody">
+                   <div className="message">
+                     <div className="warnTitle">Are you sure ?</div>
+                     <div className="warning">Do you really want to delete conversation & it's messages? This process cannot be undone.  </div>
+                   </div>
+                 <div className="buttons">
+                  <button className="signinButton" type="button" onClick={() => {setmodal(false)}}  style= {{width : "30%", borderRadius : "10px"}}>Cancel</button>
+                  <button className="registerButton" type='button' onClick={() => deleteConversationHandler(XbtnId, token)}  style= {{width : "30%", fontSize : "1.2rem"}}>Delete</button>
+                  </div>
+                </div>
+      ) : <Spinner/>
+             }
+           </Modal>
         <div
-          on
-          onClick={() => deleteConversationHandler(a._id, token)}
           className="button"
+          onClick={() => {
+            setmodal(true); 
+            setXbtnId(a._id)
+          }}
         >
+           
           <button>❌</button>
         </div>
       </div>
@@ -161,7 +198,7 @@ export default function Messenger() {
     <div className="noConversationText">no conversations</div>
   );
 
-  if (loding) {
+  if (loading) {
     conversationss = <Spinner />;
   }
 

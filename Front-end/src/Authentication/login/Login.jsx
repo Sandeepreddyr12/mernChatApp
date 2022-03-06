@@ -69,7 +69,7 @@ const axiosLogin = (user) => {
   const guestLogin = () =>{
     const user = {
       email: "test@test.com",
-      password: 123456,
+      password: "123456",
     }
 
     axiosLogin(user);

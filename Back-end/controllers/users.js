@@ -231,7 +231,6 @@ const updateUser = async (req, res, next) => {
 
   const imagePath = existingUser.image
 
-
     existingUser.name = name;
     existingUser.image = req?.file?.path;
 

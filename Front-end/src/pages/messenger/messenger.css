@@ -194,6 +194,48 @@
   object-fit: cover;
 }
 
+
+.modalbody{
+  background-color: #c7e7d8;
+  height: 18rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2rem 1rem;
+}
+.modalbody .message{
+  padding: 0 2rem;
+}
+.modalbody .warnTitle{
+  text-align: center;
+  font-size: 1.8rem;
+  opacity: .7;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  margin-bottom: 1.5rem;
+}
+
+.modalbody .warning{
+  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  opacity: .8;
+}
+
+
+.modalbody .buttons{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+ 
+}
+.modalbody button{
+  margin:  0 .5rem;
+}
+
+.modalbody button:hover{
+  opacity: .8;
+}
+
+
  @media screen and (max-width: 620px) { */
 
 /* .chatMenu{
