@@ -6,7 +6,6 @@ import "./conversation.css";
 import { UserContext } from "../../context/userContext";
 
 export default function Conversation(props) {
-  // const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   const [User, setUser] = useState(null)
   const [activeStyle, setactiveStyle] = useState({})
@@ -21,7 +20,7 @@ export default function Conversation(props) {
 
     const getUser = async () => {
       try {
-        const res = await axios(`http://localhost:5000/profile/user/${ID}`, {headers : { Authorization : `Bearer ${owner?.token}`}});
+        const res = await axios(`${process.env.REACT_APP_BACKEND_URL}profile/user/${ID}`, {headers : { Authorization : `Bearer ${owner?.token}`}});
         setUser(res.data);
       } catch (err) {
         console.log(err);
@@ -37,7 +36,7 @@ export default function Conversation(props) {
     <div class="leaderboard">
   <div class="leaderboard__profiles">
     <div class="leaderboard__profile">
-      <img src={`http://localhost:5000/${User?.image}`} alt="" class="leaderboard__picture"/>
+      <img src={`${process.env.REACT_APP_BACKEND_URL}${User?.image}`} alt="" class="leaderboard__picture"/>
       <span class="leaderboard__name">{props.data.name}</span>
     </div>
   </div>

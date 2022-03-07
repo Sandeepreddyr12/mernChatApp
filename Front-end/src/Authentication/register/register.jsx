@@ -49,7 +49,7 @@ export default function Register() {
       toast.loading("wait a moment ⌛, ur about to join us");
 
 
-        axios.post("http://localhost:5000/profile/signup", formData, {headers : { "Content-Type": "multipart/form-data" }})
+        axios.post(process.env.REACT_APP_BACKEND_URL+"profile/signup", formData, {headers : { "Content-Type": "multipart/form-data" }})
         .then((a) => {
           console.log(a.data);
           login(a.data,a.data.token)

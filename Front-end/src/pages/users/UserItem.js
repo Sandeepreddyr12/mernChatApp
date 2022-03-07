@@ -16,7 +16,7 @@ const UserItem = props => {
         profile2 : props.image,
     }
 
-    axios.post("http://localhost:5000/",newConversation, {headers : { Authorization : `Bearer ${props.userId.token}`}})
+    axios.post(process.env.REACT_APP_BACKEND_URL,newConversation, {headers : { Authorization : `Bearer ${props.userId.token}`}})
     .then((a) =>{
       console.log(a)
     })

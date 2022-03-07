@@ -66,7 +66,7 @@ app.use((err, req, res, next) =>{
 const server = app.listen(5000, () =>{ console.log('node js connected')})
 
 mongoose
-    .connect('mongodb+srv://sandyman:sandyman123@cluster0.w74mw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority')
+    .connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.w74mw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`)
     .then(()=>{console.log('mongodb connected')})
     .catch(() => {console.log('error while connecting database')})
 

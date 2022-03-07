@@ -15,7 +15,7 @@ const Users = props => {
   useEffect(() => {
     setloading(true)
 
-    axios.get(`http://localhost:5000/profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner?.token}`}})
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner?.token}`}})
     .then(a =>{
       setusers(a.data.users)
       setloading(false)

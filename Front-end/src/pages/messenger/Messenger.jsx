@@ -60,7 +60,7 @@ export default function Messenger() {
     setloading(true);
 
     axios
-      .get(`http://localhost:5000/${owner?.userId}`, {
+      .get(`${process.env.REACT_APP_BACKEND_URL}${owner?.userId}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((a) => {
@@ -80,7 +80,7 @@ export default function Messenger() {
 
     // socket.emit("join chat", currentChat?._id);
     axios
-      .get(`http://localhost:5000/chat/${currentChat?._id}`)
+      .get(`${process.env.REACT_APP_BACKEND_URL}chat/${currentChat?._id}`)
       .then((a) => {
         setchatData(a.data);
         // console.log(chatData)
@@ -102,7 +102,7 @@ export default function Messenger() {
     socket.emit("sendMessage", postmessage);
 
     axios
-      .post("http://localhost:5000/chat/", postmessage)
+      .post(process.env.REACT_APP_BACKEND_URL+"chat/", postmessage)
       .then((a) => {
         console.log(a.data);
         // console.log("postmessage")
@@ -136,7 +136,7 @@ export default function Messenger() {
 
     setloading(true);
     axios
-      .delete(`http://localhost:5000/${id}`, {
+      .delete(`${process.env.REACT_APP_BACKEND_URL}${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((a) => {
@@ -210,7 +210,7 @@ export default function Messenger() {
             <Link to="/profile">
             <div className="profile_img">
               <img
-                src={`http://localhost:5000/${owner?.profile}`}
+                src={`${process.env.REACT_APP_BACKEND_URL}${owner?.profile}`}
                 alt="profile card"
               />
             </div>

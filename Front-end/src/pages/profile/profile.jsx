@@ -47,7 +47,7 @@ export default function Profile() {
       
       setLoading(true)
 
-        axios.patch(`http://localhost:5000/profile/${user?.userId}`, formData, {headers : { "Content-Type": "multipart/form-data", Authorization : `Bearer ${token}` }})
+        axios.patch(`${process.env.REACT_APP_BACKEND_URL}profile/${user?.userId}`, formData, {headers : { "Content-Type": "multipart/form-data", Authorization : `Bearer ${token}` }})
         .then((a) => {
           console.log(a.data);
           login(a.data,a.data.token)
@@ -87,7 +87,7 @@ export default function Profile() {
         <div className ="wrapper">
   <div className ="profile-card js-profile-card">
     <div className ="profile-card__img">
-      <img src= {`http://localhost:5000/${user?.profile}`} alt="profile card"/>
+      <img src= {`${process.env.REACT_APP_BACKEND_URL}${user?.profile}`} alt="profile card"/>
     </div>
 
     <div className ="profile-card__cnt js-profile-cnt">

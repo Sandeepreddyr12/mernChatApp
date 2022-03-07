@@ -16,7 +16,7 @@ const people = (props) => {
     };
 
     axios
-      .post("http://localhost:5000/", newConversation, {
+      .post(process.env.REACT_APP_BACKEND_URL, newConversation, {
         headers: { Authorization: `Bearer ${props.userId.token}` },
       })
       .then((a) => {
@@ -32,7 +32,7 @@ const people = (props) => {
     <div>
       <div class="our-team">
         <div class="picture">
-          <img class="img-fluid" src={`http://localhost:5000/${props.image}`} />
+          <img class="img-fluid" src={`${process.env.REACT_APP_BACKEND_URL}${props.image}`} />
         </div>
         <div class="team-content">
           <h3 class="name">{props.name}</h3>

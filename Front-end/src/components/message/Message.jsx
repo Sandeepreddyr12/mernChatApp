@@ -11,7 +11,7 @@ export default function Message(props) {
       <div className="messageTop">
         <img
           className="messageImg"
-          src={`http://localhost:5000/${profile}`}
+          src={`${process.env.REACT_APP_BACKEND_URL}${profile}`}
           alt="i"
         />
         <p className="messageText">{props.data.message}</p>
