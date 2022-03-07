@@ -62,8 +62,9 @@ app.use((err, req, res, next) =>{
   res.json({message : err.message || "an unknown error occured"})
 })
 
+const PORT = process.env.PORT;
 
-const server = app.listen(5000, () =>{ console.log('node js connected')})
+const server = app.listen(PORT, () =>{ console.log('node js connected')})
 
 mongoose
     .connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.w74mw.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`)
