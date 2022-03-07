@@ -68,20 +68,37 @@ const deleteConversation = async (req,res,next) => {
     res.status(200);
   } catch (err) {
     res.status(500).json(err);
-    next(err)
+    return next(err)
   }
 
 
   try{
     await conversation.remove();
     res.status(200).json("deleted conversation");
-    console.log("deleted conversation")
 
   }catch (err){
     res.status(500).json(err);
-    next(err)
+    return next(err)
   }
 
+
+  // used transactions, but failed
+
+  // try {
+  //   const sess = await mongoose.startSession();
+  //   sess.startTransaction();
+  //   await Chat.deleteMany([{conversationId : req.params.id}],{ session: sess });
+  //   await conversation.remove({ session: sess });
+  //   await sess.commitTransaction();
+  //   // console.log("delete conversations")
+  // } catch (err){
+  //   res.status(500).json(err);
+  //   return next(err)
+  // }
+  
+  // if(res.headerSent){
+  //   res.status(200).json("Deleted conversation");
+  // }
   
 
 } 
