@@ -15,7 +15,7 @@ import { UserContext } from "../../context/userContext";
 import Spinner from "../../components/spinner/Spinner";
 
 let socket;
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = process.env.REACT_APP_SOCKET_END;
 
 export default function Messenger() {
 
