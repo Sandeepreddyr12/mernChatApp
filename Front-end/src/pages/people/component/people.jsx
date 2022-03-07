@@ -21,7 +21,7 @@ const people = (props) => {
       })
       .then((a) => {
         // console.log(a)
-        toast.success(`U-R Now Connected With ${props.name} `,{position: "bottom-center",theme : 'dark', autoClose: 2000});
+        toast.success(`u are Now Connected With ${props.name} `,{position: "bottom-center",theme : 'dark', autoClose: 2000});
       })
       .catch((err) => {
         console.log(err);
