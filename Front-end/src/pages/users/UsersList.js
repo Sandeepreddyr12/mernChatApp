@@ -14,16 +14,12 @@ const UsersList = props => {
     axios.get(`${process.env.REACT_APP_BACKEND_URL}profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner.token}`}})
     .then(a =>{
       setusers(a.data.users)
-      console.log(a.data.users);
     })
     .catch(err =>{
-      console.log(err)
     })
     
   },[]);
 
-  // console.log(users)
-  // console.log(user, "user")
 
   if (users.length === 0) {
     return (

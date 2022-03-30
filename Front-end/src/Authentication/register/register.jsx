@@ -22,10 +22,9 @@ export default function Register() {
   const password = useRef();
 
   let image;
-  let fileIsValid;
+  // let fileIsValid;
 
   const InputHandler = ( pickedFile, fileIsValid) =>{
-    console.log(pickedFile);
     return (
       image = pickedFile,
       fileIsValid = fileIsValid
@@ -36,7 +35,6 @@ export default function Register() {
 
   const registerHandler =  (e) => {
     e.preventDefault();
-    console.log(image)
      
       const formData = new FormData();
       formData.append('name', username.current.value);
@@ -51,7 +49,6 @@ export default function Register() {
 
         axios.post(process.env.REACT_APP_BACKEND_URL+"profile/signup", formData, {headers : { "Content-Type": "multipart/form-data" }})
         .then((a) => {
-          console.log(a.data);
           login(a.data,a.data.token)
           setLoading(false)
           // history.push("/login")

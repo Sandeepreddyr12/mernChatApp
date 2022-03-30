@@ -23,7 +23,7 @@ export default function Conversation(props) {
         const res = await axios(`${process.env.REACT_APP_BACKEND_URL}profile/user/${ID}`, {headers : { Authorization : `Bearer ${owner?.token}`}});
         setUser(res.data);
       } catch (err) {
-        console.log(err);
+        
       }
     };
     getUser();
@@ -36,7 +36,7 @@ export default function Conversation(props) {
     <div class="leaderboard">
   <div class="leaderboard__profiles">
     <div class="leaderboard__profile">
-      <img src={`${process.env.REACT_APP_BACKEND_URL}${User?.image}`} alt="" class="leaderboard__picture"/>
+      <img src={`${process.env.REACT_APP_S3_URL}${User?.image}`} alt="" class="leaderboard__picture"/>
       <span class="leaderboard__name">{props.data.name}</span>
     </div>
   </div>

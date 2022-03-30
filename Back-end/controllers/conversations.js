@@ -32,7 +32,6 @@ const createConversation = async (req,res,next) =>{
 //-------
 
 const getConversation = async (req, res,next) => {
-  // console.log(req.params.id,"ssssss")
     try {
       const conversation = await Conversation.find({$or : [{userId1 : req.params.id},{userId2 : req.params.id}]});
       res.status(200).json(conversation);

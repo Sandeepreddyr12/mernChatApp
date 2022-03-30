@@ -19,25 +19,13 @@ const Users = props => {
     .then(a =>{
       setusers(a.data.users)
       setloading(false)
-      // console.log(a.data.users);
     })
     .catch(err =>{
       setloading(false)
-      console.log(err)
     })
     
   },[]);
 
-  // console.log(users)
-  // console.log(user, "user")
-
-  // if (users.length === 0) {
-  //   return (
-  //     <div className="center">
-  //         <h2>No users found.</h2>
-  //     </div>
-  //   );
-  // }
 
   let people = (users.length ? (users.map(a => (
     <People

@@ -10,13 +10,14 @@ const conversations = require('./routes/conversations')
 const chats = require('./routes/chats')
 const profile = require('./routes/users')
 const HttpError = require('./models/http-error')
+// const {getFileStream} = require('./s3')
 
 
 const app = express();
 
 app.use(bodyparser.json());
 
-app.use('/uploads/images', express.static(path.join('uploads', 'images')));
+// app.use('/uploads/images', express.static(path.join('uploads', 'images')));
 
 
 
@@ -36,6 +37,21 @@ app.use((req, res, next) => {
 
   // routes
 
+  // app.get('/images/:key', async (req, res,next) => {
+  //   const key = req.params.key
+   
+  //   try {
+  //     const readStream =   getFileStream(key);
+  //     readStream.pipe(res)
+  //  } catch (err) {
+  //    const error = new HttpError(
+  //      'downloading image from s3 failed, please try again later.',
+  //      500
+  //    );
+  //    return next(error);
+  //  }
+  // })
+
 app.use('/profile', profile);
 app.use('/chat', chats);
 app.use('/', conversations);
@@ -51,7 +67,6 @@ app.use((err, req, res, next) =>{
 
   if (req.file) {
     fs.unlink(req.file.path, err => {
-      console.log(err,"line 56 app js");// error 
     })};
   
 
@@ -62,7 +77,7 @@ app.use((err, req, res, next) =>{
   res.json({message : err.message || "an unknown error occured"})
 })
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 const server = app.listen(PORT, () =>{ console.log('node js connected')})
 
@@ -74,7 +89,7 @@ mongoose
     const io = require('socket.io')(server,{
       pingTimeout : 6000,
       cors : {
-        origin : "http://localhost:3000",
+        origin : "*",
       },
     });
 
@@ -103,7 +118,6 @@ io.on("connection", (socket) => {
     io.emit("getUsers", users);
   });
 
-  console.log(users)
 
   //send and get message
   socket.on("sendMessage", (data) => {

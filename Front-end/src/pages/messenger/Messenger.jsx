@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import "./messenger.css";
 import Conversation from "../../components/conversations/Conversation";
 import Message from "../../components/message/Message";
-import UsersList from "../users/UsersList";
+// import UsersList from "../users/UsersList";
 import { UserContext } from "../../context/userContext";
 import Spinner from "../../components/spinner/Spinner";
 
@@ -44,19 +44,14 @@ export default function Messenger() {
   }, []);
 
   useEffect(() => {
-    // console.log("data");
-
-    // console.log(ArrivalMessage);
 
     ArrivalMessage &&
-      (currentChat?.userId1 == ArrivalMessage.sender ||
-        currentChat?.userId1 == ArrivalMessage.receiver) &&
+      (currentChat?.userId1 === ArrivalMessage.sender ||
+        currentChat?.userId1 === ArrivalMessage.receiver) &&
       setchatData([...chatData, ArrivalMessage]);
-    // console.log(chatData);
   }, [ArrivalMessage]);
 
   useEffect(() => {
-    // console.log(owner)
     setloading(true);
 
     axios
@@ -68,32 +63,31 @@ export default function Messenger() {
         setloading(false);
       })
       .catch((err) => {
-        console.log(err);
         setloading(false);
       });
   }, [fakeState]);
 
-  // console.log(conversations)
 
   useEffect(() => {
-    // console.log(currentChat?._id)
 
     // socket.emit("join chat", currentChat?._id);
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}chat/${currentChat?._id}`)
       .then((a) => {
         setchatData(a.data);
-        // console.log(chatData)
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   }, [currentChat]);
 
   const newMessageHandler = () => {
+    if(newMessage.trim() === ''){
+      return
+    }
     const postmessage = {
       id: currentChat._id,
       sender: owner?.userId,
       receiver:
-        owner?.userId == currentChat.userId2
+        owner?.userId === currentChat.userId2
           ? currentChat.userId1
           : currentChat.userId2,
       message: newMessage,
@@ -104,17 +98,14 @@ export default function Messenger() {
     axios
       .post(process.env.REACT_APP_BACKEND_URL+"chat/", postmessage)
       .then((a) => {
-        console.log(a.data);
-        // console.log("postmessage")
         setchatData([...chatData, a.data]);
         setnewMessage("");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {});
   };
 
   useEffect(() => {
     socket.on("getMessage", (data) => {
-      console.log(data, "data");
       setArrivalMessage({
         conversationId: data.id,
         sender: data.sender,
@@ -152,7 +143,6 @@ export default function Messenger() {
         setloading(false);
         toast.dismiss();
         toast.error( `error occured.... 😫`)
-        // console.log(err);
       });
   };
 
@@ -163,7 +153,7 @@ export default function Messenger() {
     conversations.map((a) => (
       <div className="conversations" >
         <div onClick={() => setcurrentChat(a)} key={a._id}>
-          <Conversation data={a}/>
+          <Conversation data={a}  />
         </div>
         <Modal isOpen = {modal} onRequestClose = {() =>{setmodal(false)}}   className="Modal"
            overlayClassName="Overlay">
@@ -210,7 +200,7 @@ export default function Messenger() {
             <Link to="/profile">
             <div className="profile_img">
               <img
-                src={`${process.env.REACT_APP_BACKEND_URL}${owner?.profile}`}
+                src={`${process.env.REACT_APP_S3_URL}${owner?.profile}`}
                 alt="profile card"
               />
             </div>

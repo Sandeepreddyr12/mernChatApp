@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const HttpError = require('../models/http-error');
 const User = require('../models/users');
+const {uploadFile,deleteFile} = require('../s3');
 
 
 //-----------get users--------------
@@ -51,7 +52,6 @@ const getUser = async (req, res, next) => {
 
 
 const signup = async (req, res, next) => {
-  // console.log(req);
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
@@ -90,10 +90,24 @@ const signup = async (req, res, next) => {
     return next(error);
   }
 
+  let awsS3File;
+
+  try {
+     awsS3File = await uploadFile(req.file)
+  } catch (err) {
+    const error = new HttpError(
+      'uploading image to s3 failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+ 
+
   const createdUser = new User({
     name,
     email,
-    image: req.file.path,
+    image: awsS3File.key,
     password : hashedPassword,
   });
 
@@ -205,7 +219,6 @@ const login = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
 
-  console.log("update user patch")
 
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -231,14 +244,27 @@ const updateUser = async (req, res, next) => {
 
   const imagePath = existingUser.image
 
+
+  
+  let awsS3File;
+
+  try {
+     awsS3File = await uploadFile(req.file)
+  } catch (err) {
+    const error = new HttpError(
+      'uploading image to s3 failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
     existingUser.name = name;
-    existingUser.image = req?.file?.path;
+    existingUser.image = awsS3File.Key;
 
     
   try {
     await existingUser.save();
   } catch (err) {
-    console.log(err)
     const error = new HttpError(
       err + 'Updating User failed, please try again later.,save',
       500
@@ -246,8 +272,22 @@ const updateUser = async (req, res, next) => {
     return next(error);
   }
 
+
+
+
+  try {
+     await deleteFile(imagePath)
+  } catch (err) {
+    // const error = new HttpError(
+    //   'delteting image to s3 failed, please try again later.',
+    //   500
+    // );
+    // return next(error);
+    console.log("deleting image failed")
+  }
+
   if (req.file) {
-    fs.unlink(imagePath, (err) => {
+    fs.unlink(`uploads/images/${imagePath}`, (err) => {
       if (err) {
           console.log(err,"unlink error");
       }

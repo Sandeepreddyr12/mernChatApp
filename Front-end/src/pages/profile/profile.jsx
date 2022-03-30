@@ -30,16 +30,12 @@ export default function Profile() {
     )
   }
 
-  console.log(user)
 
 
 
   const updateHandler =  (e) => {
-    console.log("update handler")
     e.preventDefault();
-    console.log(image)
-    console.log(username.current.value)
-
+   
      
       const formData = new FormData();
       formData.append('name', username.current.value);
@@ -49,7 +45,6 @@ export default function Profile() {
 
         axios.patch(`${process.env.REACT_APP_BACKEND_URL}profile/${user?.userId}`, formData, {headers : { "Content-Type": "multipart/form-data", Authorization : `Bearer ${token}` }})
         .then((a) => {
-          console.log(a.data);
           login(a.data,a.data.token)
           setLoading(false)
           setmodal(false)
@@ -58,7 +53,6 @@ export default function Profile() {
         })
         .catch ((err) => {
         setLoading(false)
-        console.log(err);
         setmodal(false)
         toast.dismiss()
         toast.error( `${err?.response?.data?.message}  😫`)
@@ -87,7 +81,7 @@ export default function Profile() {
         <div className ="wrapper">
   <div className ="profile-card js-profile-card">
     <div className ="profile-card__img">
-      <img src= {`${process.env.REACT_APP_BACKEND_URL}${user?.profile}`} alt="profile card"/>
+      <img src= {`${process.env.REACT_APP_S3_URL}${user?.profile}`} alt="profile card"/>
     </div>
 
     <div className ="profile-card__cnt js-profile-cnt">

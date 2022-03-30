@@ -3,7 +3,6 @@ import { format } from "timeago.js";
 import "./message.css";
 
 export default function Message(props) {
-  console.log(props.data)
   let profile = props.data.sender === props.conversation.userId1 ? props.conversation.profile1 : props.conversation.profile2;
 
   return (
@@ -11,7 +10,7 @@ export default function Message(props) {
       <div className="messageTop">
         <img
           className="messageImg"
-          src={`${process.env.REACT_APP_BACKEND_URL}${profile}`}
+          src={`${process.env.REACT_APP_S3_URL}${profile}`}
           alt="i"
         />
         <p className="messageText">{props.data.message}</p>

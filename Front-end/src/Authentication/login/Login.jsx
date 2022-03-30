@@ -27,14 +27,13 @@ useEffect(() => {
     navigate("/", {replace : true});
   }
   
-}, [loading]);
+}, [loading,user]);
 
 
 const axiosLogin = (user) => {
       
   axios.post(process.env.REACT_APP_BACKEND_URL+"profile/login", user)
   .then((a) => {
-    // console.log(a.data);
     login(a.data,a.data.token);
     setLoading(false);
     toast.dismiss();
@@ -64,7 +63,6 @@ const axiosLogin = (user) => {
       axiosLogin(user);
   };
 
-  // console.log(user)
 
   const guestLogin = () =>{
     const user = {

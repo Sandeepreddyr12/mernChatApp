@@ -18,9 +18,8 @@ const UserItem = props => {
 
     axios.post(process.env.REACT_APP_BACKEND_URL,newConversation, {headers : { Authorization : `Bearer ${props.userId.token}`}})
     .then((a) =>{
-      console.log(a)
     })
-    .catch((err) =>{console.log(err)})
+    .catch((err) =>{})
   }
   return (
     <li className="user-item">

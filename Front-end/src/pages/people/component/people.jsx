@@ -20,11 +20,9 @@ const people = (props) => {
         headers: { Authorization: `Bearer ${props.userId.token}` },
       })
       .then((a) => {
-        // console.log(a)
         toast.success(`u are Now Connected With ${props.name} `,{position: "bottom-center",theme : 'dark', autoClose: 2000});
       })
       .catch((err) => {
-        console.log(err);
           toast.error( `Connection Failed  😫`, {autoClose: 2000})
       });
   };
@@ -32,7 +30,7 @@ const people = (props) => {
     <div>
       <div class="our-team">
         <div class="picture">
-          <img class="img-fluid" src={`${process.env.REACT_APP_BACKEND_URL}${props.image}`} />
+          <img class="img-fluid" src={`${process.env.REACT_APP_S3_URL}${props.image}`} alt = "" />
         </div>
         <div class="team-content">
           <h3 class="name">{props.name}</h3>
