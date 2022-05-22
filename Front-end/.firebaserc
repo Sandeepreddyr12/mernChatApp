@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "react-myburger-3e53f"
-  }
+    "default": "mernchatapp-c9c60",
+    "chatapp": "mernchatapp-c9c60"
+  },
+  "targets": {}
 }
