@@ -1,5 +1,12 @@
 # mernChatApp
 
-deployed link : https://mernchatapp-c9c60.web.app/
+deployed link :[Mern chaT app](https://mernchatapp-c9c60.web.app/)
 
-Technologies used, React, express/Node, mongo db/atlas, AWS s3, JWT 
+
+
+• React.
+• Express / Node.
+• Mongoose / mongo db.
+• Socket IO / Web sockets.
+• AWS S3.
+• JWT Authorization.
