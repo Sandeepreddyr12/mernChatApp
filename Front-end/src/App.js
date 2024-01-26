@@ -29,6 +29,7 @@ function App() {
   const { token, login, logout, user } = useAuth();
 
 
+
   return (
     <UserContext.Provider value = {{user,login,logout,token}}>
       <div  style={{backgroundColor : "#ecc7c7" }}>

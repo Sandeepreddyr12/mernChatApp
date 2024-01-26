@@ -15,7 +15,9 @@ const Users = props => {
   useEffect(() => {
     setloading(true)
 
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner?.token}`}})
+    const controller = new AbortController();
+
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner?.token}`},signal: controller.signal})
     .then(a =>{
       setusers(a.data.users)
       setloading(false)
@@ -23,6 +25,10 @@ const Users = props => {
     .catch(err =>{
       setloading(false)
     })
+
+    return () => {
+      controller.abort();
+    };
     
   },[]);
 

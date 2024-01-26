@@ -16,17 +16,21 @@ export default function Conversation(props) {
 
   useEffect(() => {
 
-
+const controller = new AbortController();
 
     const getUser = async () => {
       try {
-        const res = await axios(`${process.env.REACT_APP_BACKEND_URL}profile/user/${ID}`, {headers : { Authorization : `Bearer ${owner?.token}`}});
+        const res = await axios(`${process.env.REACT_APP_BACKEND_URL}profile/user/${ID}`, {headers : { Authorization : `Bearer ${owner?.token}`},signal: controller.signal});
         setUser(res.data);
       } catch (err) {
         
       }
     };
     getUser();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   //style={props.activeStyle ? {borderLeft : "3px solid red"} : {}}

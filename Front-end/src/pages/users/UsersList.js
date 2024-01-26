@@ -11,12 +11,19 @@ const UsersList = props => {
   
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner.token}`}})
+
+const controller = new AbortController();
+
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}profile/${owner?.userId}`, {headers : { Authorization : `Bearer ${owner.token}`},signal: controller.signal})
     .then(a =>{
       setusers(a.data.users)
     })
     .catch(err =>{
     })
+
+    return () => {
+      controller.abort();
+    };
     
   },[]);
 

@@ -54,9 +54,11 @@ export default function Messenger() {
   useEffect(() => {
     setloading(true);
 
+    const controller = new AbortController();
+
     axios
       .get(`${process.env.REACT_APP_BACKEND_URL}${owner?.userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },signal: controller.signal
       })
       .then((a) => {
         setconversations(a.data);
@@ -65,18 +67,31 @@ export default function Messenger() {
       .catch((err) => {
         setloading(false);
       });
+
+
+      return () => {
+      controller.abort();
+    };
   }, [fakeState]);
 
 
   useEffect(() => {
 
     // socket.emit("join chat", currentChat?._id);
+
+const controller = new AbortController();
+
+
     axios
-      .get(`${process.env.REACT_APP_BACKEND_URL}chat/${currentChat?._id}`)
+      .get(`${process.env.REACT_APP_BACKEND_URL}chat/${currentChat?._id}`,{signal: controller.signal})
       .then((a) => {
         setchatData(a.data);
       })
       .catch((err) => {});
+
+      return () => {
+      controller.abort();
+    };
   }, [currentChat]);
 
   const newMessageHandler = () => {
